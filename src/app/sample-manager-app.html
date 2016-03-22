@@ -1,0 +1,15 @@
+<div class="app-content">
+  <nav>
+    <a materialize="sideNav" [materializeParams]="[{edge:'left', menuWidth: 65, closeOnClick: false}]"
+       href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">reorder</i></a>
+    <div class="brand"><img src="../assets/images/icon_inverted.png" height="45px" /></div>
+    <ul id="slide-out" class="side-nav fixed">
+      <li *ngFor="#route of routes" [class]="isActive(route.name)?'active':''"><a [routerLink]="[route.name]"><span><i class="material-icons">{{route.icon}}</i></span></a></li>
+    </ul>
+
+  </nav>
+
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
+</div>

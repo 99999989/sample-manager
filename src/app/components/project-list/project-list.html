@@ -1,0 +1,27 @@
+<h3>Projekte</h3>
+<div class="row">
+  <div *ngFor="#project of user.projects" class="col s12 m6 l4">
+    <div class="card">
+      <div class="card-image waves-effect waves-block waves-light">
+        <img class="activator" src="{{project.imageUrl}}" height="200px">
+
+        <span class="card-title">{{project.name}}</span>
+      </div>
+
+      <div class="card-content">
+
+        <p>{{project.questions.length}} Fragen</p>
+        <p>{{project.users.length}} Teilnehmer</p>
+      </div>
+      <a class="btn-floating btn-large waves-effect waves-light "
+         (click)="navigateToProject(project.id)">
+        <i class="material-icons">description</i>
+      </a>
+      <div class="card-reveal">
+        <span class="card-title grey-text text-darken-4">{{project.name}}<i class="material-icons right">close</i></span>
+        <p *ngFor="#question of project.questions">{{question.text}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
