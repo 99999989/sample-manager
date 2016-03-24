@@ -1,10 +1,10 @@
 export class Rule {
   private _id:string;
-  private _begin:string;
-  private _end:string;
+  private _begin:number;
+  private _end:number;
   private _repeats:number;
 
-  constructor(id:string, begin:string, end:string, repeats:number) {
+  constructor(id:string, begin:number, end:number, repeats:number) {
     this._id = id;
     this._begin = begin;
     this._end = end;
@@ -19,19 +19,19 @@ export class Rule {
     this._id = value;
   }
 
-  get begin():string {
+  get begin():number {
     return this._begin;
   }
 
-  set begin(value:string) {
+  set begin(value:number) {
     this._begin = value;
   }
 
-  get end():string {
+  get end():number {
     return this._end;
   }
 
-  set end(value:string) {
+  set end(value:number) {
     this._end = value;
   }
 

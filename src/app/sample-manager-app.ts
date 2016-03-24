@@ -63,4 +63,5 @@ export class SampleManagerApp {
   public isActive(routeName) {
     return this._router.isRouteActive(this._router.generate([routeName]))
   }
+
 }

@@ -1,36 +1,110 @@
 <h3>{{project.name}}</h3>
 <h6>{{project.created}}</h6>
 <div class="row">
-  <div *ngFor="#question of project.questions" class="col s12 m6 l4">
-    <div class="card">
+  <div *ngFor="#question of project.questions" class="col s12 m6 l6">
+    <div class="card hoverable">
       <div class="card-content">
+        <div class="switch right">
+          <label>
+            Inaktiv
+            <input type="checkbox" checked>
+            <span class="lever"></span>
+            Aktiv
+          </label>
+        </div>
         <span class="card-title"></span>
-        <h5>{{question.text}}</h5>
+        <i class="medium material-icons">{{question.type !== 'Lautstärke' ? question.type === 'Lokalisierung' ? 'place' : 'help_outline' : 'hearing'}}</i>
+        <h5 class="teal-text accent-4">{{question.text}}</h5>
 
+        <p class="grey-text">{{question.type}} - {{question.answerValues}}</p>
+        <p>{{question.rules.length}} Regel{{question.rules.length === 1 ? '' : 'n'}}</p>
+        <p>{{getAnswerCount(question)}} Antwort{{getAnswerCount(question) === 1 ? '' : 'en'}}</p>
       </div>
 
-      <div class="" style="padding: 5px" *ngFor="#rule of question.rules">
-        <div class="col s4 m4 l4 valign-wrapper">
-          <i class="material-icons">first_page</i><span class="valign"> {{rule.begin}}</span>
-        </div>
-        <div class="col s4 m4 l4 valign-wrapper">
-          <i class="material-icons">last_page</i><span class="valign"> {{rule.end}}</span>
-        </div>
-        <div class="col s4 m4 l4 valign-wrapper">
-          <i class="material-icons">replay</i><span class="valign"> {{rule.repeats}}</span>
-        </div>
-      </div>
 
-      <p>&nbsp;</p>
+      <div class="card-reveal">
+        <span class="card-title grey-text text-darken-4" (click)="saveData(question)">{{question.menu}}<i class="material-icons right">close</i></span>
+        <div *ngIf="question.menu === 'Bearbeiten'">
+          <br>
+          <!-- Dropdown Trigger -->
+          <button materialize="dropdown"
+                  [materializeParams]="[{constrainwidth: false}]"
+                  class="dropdown-button btn"
+                  [attr.data-activates]="question.id"><i class="left material-icons">{{question.type !== 'Lautstärke' ? question.type === 'Lokalisierung' ? 'place' : 'help_outline' : 'hearing'}}</i>{{question.type}}</button>
+          <!-- Dropdown Structure -->
+          <ul id="{{question.id}}" class="dropdown-content">
+            <li><a (click)="question.type = 'Ja / Nein'"><i class="left material-icons">help_outline</i>Ja / Nein</a></li>
+            <li><a (click)="question.type = 'Häufigkeit'"><i class="left material-icons">help_outline</i>Häufigkeit</a></li>
+            <li><a (click)="question.type = 'Bewertung'"><i class="left material-icons">help_outline</i>Bewertung</a></li>
+            <li class="divider"></li>
+            <li><a (click)="question.type = 'Lautstärke'"><i class="left material-icons">hearing</i>Lautstärke</a></li>
+            <li><a (click)="question.type = 'Lokalisierung'"><i class="left material-icons">place</i>Lokalisierung</a></li>
+          </ul>
+          <p></p>
+          <div class="input-field col s12">
+            <i class="material-icons prefix">help</i>
+            <input [(ngModel)]="question.text" id="icon_prefix" type="text" class="validate">
+            <label class="active" for="icon_prefix">Frage</label>
+          </div>
+        </div>
+        <div *ngIf="question.menu === 'Regeln'">
+          <table>
+            <thead>
+            <tr>
+              <th data-field="id" class="center-align"><i class="material-icons">first_page</i></th>
+              <th data-field="name" class="center-align"><i class="material-icons">last_page</i></th>
+              <th data-field="price" class="center-align"><i class="material-icons">replay</i></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr *ngFor="#rule of question.rules">
+              <td class="center-align">
+                {{rule.begin}} Uhr
+                <div class="range-field">
+                  <input type="range" min="0" max="{{rule.end}}" [(ngModel)]="rule.begin"/>
+                </div>
+              </td>
+              <td class=center-align>
+                {{rule.end}} Uhr
+                <div class="range-field">
+                  <input type="range" min="{{rule.begin}}" max="24" [(ngModel)]="rule.end"/>
+                </div>
+              </td>
+              <td class="center-align">
+                {{rule.repeats}} mal
+                <div class="range-field">
+                  <input type="range" min="1" max="10" [(ngModel)]="rule.repeats"/>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="question.menu === 'Statistiken'" class="valign-wrapper">
+          <img src="../../../assets/images/chart.png" class="valign center-align"/>
+        </div>
+
+
+      </div>
 
       <div class="card-action">
-        <button class="btn" (click)="navigateToQuestion(question.id)">Details</button>
-        <a href="#">Link</a>
+        <button class="btn-flat activator" (click)="question.menu = 'Bearbeiten'"><i class="large material-icons">build</i></button>
+        <button class="btn-flat activator" (click)="question.menu = 'Regeln'"><i class="large material-icons">watch_later</i></button>
+        <button class="btn-flat activator" (click)="question.menu = 'Statistiken'"><i class="large material-icons">donut_small</i></button>
       </div>
 
     </div>
   </div>
 </div>
+<!--
+<base-chart class="chart"
+            [data]="doughnutChartData"
+            [labels]="doughnutChartLabels"
+            [chartType]="doughnutChartType"
+            (chartHover)="chartHovered($event)"
+            (chartClick)="chartClicked($event)"></base-chart>
+            -->
 <!--
 <div class="row">
   <div class="col s12">
