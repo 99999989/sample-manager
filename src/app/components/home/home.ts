@@ -4,6 +4,11 @@ import {Component} from 'angular2/core';
   selector: 'home',
   templateUrl: 'app/components/home/home.html',
   styleUrls: ['app/components/home/home.css'],
+  styles: [`
+     .parallax-container {
+        height: 200px;
+      }
+    `],
   providers: [],
   directives: [],
   pipes: []
@@ -12,7 +17,7 @@ import {Component} from 'angular2/core';
 export class Home {
 
   constructor() {
-    ;
+    $('.slider').slider({full_width: true});
   }
 
 }

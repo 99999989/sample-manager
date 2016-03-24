@@ -27,12 +27,20 @@ export class ProjectDetail {
         break;
       }
     }
+
+  }
+
+  public getSelectableValues(question) {
+    return question.answerValues.split(',');
   }
 
   public saveData(question) {
     //alert('data saved');
   }
 
+  public getIconByType(type) {
+    return type !== 'Lautstärke' ? type === 'Lokalisierung' ? 'place' : 'help_outline' : 'hearing'
+  }
   public getAnswerCount(question:Question) {
     let counter:number = 0;
     if (!question.rules || question.rules.length === 0) {

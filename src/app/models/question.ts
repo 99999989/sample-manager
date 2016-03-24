@@ -6,12 +6,12 @@ export class Question {
   private _id:string;
   private _type:string;
   private _text:string;
-  private _answerValues:string; // maybe extend the model here
+  private _answerValues:string[]; // maybe extend the model here
   private _answers:Answer[];
   private _project:Project;
   private _rules:Rule[];
 
-  constructor(id:string, type:string, text:string, answerValues:string, answers:Answer[], project:Project, rules:Rule[]) {
+  constructor(id:string, type:string, text:string, answerValues:string[], answers:Answer[], project:Project, rules:Rule[]) {
     this._id = id;
     this._type = type;
     this._text = text;
@@ -45,11 +45,11 @@ export class Question {
     this._text = value;
   }
 
-  get answerValues():string {
+  get answerValues():string[] {
     return this._answerValues;
   }
 
-  set answerValues(value:string) {
+  set answerValues(value:string[]) {
     this._answerValues = value;
   }
 

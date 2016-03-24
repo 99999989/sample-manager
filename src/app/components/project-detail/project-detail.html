@@ -2,7 +2,7 @@
 <h6>{{project.created}}</h6>
 <div class="row">
   <div *ngFor="#question of project.questions" class="col s12 m6 l6">
-    <div class="card hoverable">
+    <div class="card">
       <div class="card-content">
         <div class="switch right">
           <label>
@@ -13,7 +13,7 @@
           </label>
         </div>
         <span class="card-title"></span>
-        <i class="medium material-icons">{{question.type !== 'Lautstärke' ? question.type === 'Lokalisierung' ? 'place' : 'help_outline' : 'hearing'}}</i>
+        <i class="medium material-icons">{{getIconByType(question.type)}}</i>
         <h5 class="teal-text accent-4">{{question.text}}</h5>
 
         <p class="grey-text">{{question.type}} - {{question.answerValues}}</p>
@@ -24,14 +24,13 @@
 
       <div class="card-reveal">
         <span class="card-title grey-text text-darken-4" (click)="saveData(question)">{{question.menu}}<i class="material-icons right">close</i></span>
+        <!-- Bearbeiten -->
         <div *ngIf="question.menu === 'Bearbeiten'">
           <br>
-          <!-- Dropdown Trigger -->
           <button materialize="dropdown"
                   [materializeParams]="[{constrainwidth: false}]"
                   class="dropdown-button btn"
-                  [attr.data-activates]="question.id"><i class="left material-icons">{{question.type !== 'Lautstärke' ? question.type === 'Lokalisierung' ? 'place' : 'help_outline' : 'hearing'}}</i>{{question.type}}</button>
-          <!-- Dropdown Structure -->
+                  [attr.data-activates]="question.id"><i class="left material-icons">{{getIconByType(question.type)}}</i>{{question.type}}</button>
           <ul id="{{question.id}}" class="dropdown-content">
             <li><a (click)="question.type = 'Ja / Nein'"><i class="left material-icons">help_outline</i>Ja / Nein</a></li>
             <li><a (click)="question.type = 'Häufigkeit'"><i class="left material-icons">help_outline</i>Häufigkeit</a></li>
@@ -46,7 +45,16 @@
             <input [(ngModel)]="question.text" id="icon_prefix" type="text" class="validate">
             <label class="active" for="icon_prefix">Frage</label>
           </div>
+          <div class="center-align">
+            <div *ngFor="#value of question.answerValues" class="chip">
+              {{value}}
+              <i class="material-icons">close</i>
+            </div>
+            &nbsp;
+          </div>
+
         </div>
+        <!-- Regeln -->
         <div *ngIf="question.menu === 'Regeln'">
           <table>
             <thead>
@@ -74,13 +82,14 @@
               <td class="center-align">
                 {{rule.repeats}} mal
                 <div class="range-field">
-                  <input type="range" min="1" max="10" [(ngModel)]="rule.repeats"/>
+                  <input type="range" min="0" max="10" [(ngModel)]="rule.repeats"/>
                 </div>
               </td>
             </tr>
             </tbody>
           </table>
         </div>
+        <!-- Statistiken -->
         <div *ngIf="question.menu === 'Statistiken'" class="valign-wrapper">
           <img src="../../../assets/images/chart.png" class="valign center-align"/>
         </div>
@@ -92,6 +101,7 @@
         <button class="btn-flat activator" (click)="question.menu = 'Bearbeiten'"><i class="large material-icons">build</i></button>
         <button class="btn-flat activator" (click)="question.menu = 'Regeln'"><i class="large material-icons">watch_later</i></button>
         <button class="btn-flat activator" (click)="question.menu = 'Statistiken'"><i class="large material-icons">donut_small</i></button>
+        <button class="btn-flat activator" (click)="question.menu = 'Statistiken'"><i class="large material-icons">person_pin</i></button>
       </div>
 
     </div>
