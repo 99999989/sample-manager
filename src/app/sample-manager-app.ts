@@ -56,10 +56,6 @@ export class SampleManagerApp {
     {name: 'Projekte', icon: 'class'}
   ];
 
-  public sayHello(): string {
-    return 'hello';
-  }
-
   public isActive(routeName) {
     return this._router.isRouteActive(this._router.generate([routeName]))
   }

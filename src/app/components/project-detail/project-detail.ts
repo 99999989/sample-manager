@@ -20,7 +20,7 @@ export class ProjectDetail {
   private router:Router;
   constructor(routeParams: RouteParams, userService: UserService, router: Router) {
     this.router = router;
-    let user = userService.getUser('');
+    let user = userService.getUsers();
     for (let i = 0; i < user.projects.length; i++) {
       if (user.projects[i].id === routeParams.get('projectId')) {
         this.project = user.projects[i];

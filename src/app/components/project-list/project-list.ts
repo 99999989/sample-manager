@@ -16,14 +16,23 @@ import {Router} from "angular2/router";
 
 export class ProjectList {
   public repos: Observable<any>;
-  public user:User;
-
+  public users:User[];
+  private errorMessage;
   private _router:Router;
+  private _userService:UserService;
 
   constructor(userService: UserService, router: Router) {
 
-    this.user = userService.getUser('dd');
+
     this._router = router;
+    this._userService = userService;
+  }
+
+  ngOnInit() {
+    this._userService.getUsers().subscribe(
+      users => this.users = users,
+      error =>  this.errorMessage = <any>error
+    );
   }
 
   public navigateToProject(id:string) {
