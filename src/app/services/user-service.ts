@@ -12,7 +12,7 @@ import {HttpService} from './http-service';
 
 @Injectable()
 export class UserService {
-  private url:string = '/api/users/';
+  private url:string = 'api/users/';
   private http:HttpService;
 
   constructor(private http: HttpService) {
@@ -69,6 +69,16 @@ export class UserService {
      */
   public deleteUser(id: string): any {
     return this.http.delete(this.url + id)
+      .map((res) => <User> res.json())
+      .catch(this.handleError);
+  }
+
+  /**
+   * Authorize a user
+   * @returns {Observable<R>}
+   */
+  public authorizeUser(): any {
+    return this.http.get(this.url + 'authorize')
       .map((res) => <User> res.json())
       .catch(this.handleError);
   }

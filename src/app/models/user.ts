@@ -9,14 +9,4 @@ export class User {
 
   constructor() {
   }
-
-  constructor(id:string, username:string, email:string, password:string, projects:Project[]) {
-    this.id = id;
-    this.username = username;
-    this.email = email;
-    this.password = password;
-    this.projects = projects;
-  }
-
-
 }

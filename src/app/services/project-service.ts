@@ -9,7 +9,7 @@ import {Project} from '../models/project';
 
 @Injectable()
 export class ProjectService {
-  private url:string = '/api/projects/';
+  private url:string = 'api/projects/';
   private http:Http;
 
   constructor(private http: Http) {

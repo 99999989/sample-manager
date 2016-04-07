@@ -4,10 +4,11 @@ import {Http, Headers) from 'angular2/http';
 
 @Injectable()
 export class HttpService {
-  private http:Http;
-
+  private _http:Http;
+  //private host:string = 'https://mighty-everglades-95815.herokuapp.com/';
+  private host:string = 'http://localhost:3001/';
   constructor(private http: Http) {
-    this.http = http;
+    this._http = http;
   }
   private createHeaders() {
     let headers = new Headers();
@@ -16,18 +17,18 @@ export class HttpService {
   }
 
   public get(url:string) {
-    return this.http.get(url, this.createHeaders());
+    return this._http.get(this.host + url, this.createHeaders());
   }
 
   public post(url:string, data:Object) {
-    return this.http.post(url, JSON.stringify(data), this.createHeaders());
+    return this._http.post(this.host + url, JSON.stringify(data), this.createHeaders());
   }
 
   public put(url:string, data:Object) {
-    return this.http.put(url, JSON.stringify(data), this.createHeaders());
+    return this._http.put(this.host + url, JSON.stringify(data), this.createHeaders());
   }
 
   public delete(url:string) {
-    return this.http.delete(url, this.createHeaders());
+    return this._http.delete(this.host + url, this.createHeaders());
   }
 }
