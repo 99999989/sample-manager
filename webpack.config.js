@@ -74,8 +74,13 @@ module.exports = helpers.validate({
       // Allows compiling sass into css
       {
         test: /\.scss$/,
-        loader: ExtractTextPlugin.extract('style', 'css?sourceMap!postcss!sass')
+        loaders: ["style", "css", "sass"]
       },
+      /*
+      {
+        test: /\.scss$/,
+        loader: ExtractTextPlugin.extract('style', 'css?sourceMap!postcss!sass')
+      },*/
       {
         test: /\.css$/,
         loader: 'style-loader!css-loader'

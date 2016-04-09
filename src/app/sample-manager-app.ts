@@ -11,12 +11,12 @@ import {ProjectBrowser} from "./components/project-browser/project-browser";
 @Component({
   selector: 'sample-manager-app',
   providers: [],
+  styleUrl: 'app/sample-manager-app.scss',
   styles: [
     `
       .side-nav li {
         padding: 0 !important;
       }
-
       .app-content {
         padding-left: 65px;
       }

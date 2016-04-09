@@ -4,12 +4,12 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {Observable} from 'rxjs/Observable';
 
-import {Project} from '../models/project';
+import {Measure} from '../models/measure';
 import {HttpService} from './http-service';
 
 @Injectable()
-export class ProjectService {
-  private url:string = 'api/projects/';
+export class MeasureService {
+  private url:string = 'api/measures/';
   private http:HttpService;
 
   constructor(private http: HttpService) {
@@ -17,56 +17,56 @@ export class ProjectService {
   }
 
   /**
-   * Get all projects
+   * Get all measures
    * @returns {Observable<R>}
      */
-  public getProjects(): any {
+  public getMeasures(): any {
     return this.http.get(this.url)
-      .map((res) => <Project[]> res.json())
+      .map((res) => <Measure[]> res.json())
       .catch(this.handleError);
   }
 
   /**
-   * Get project by id
+   * Get measure by id
    * @param id
    * @returns {Observable<R>}
      */
-  public getProjectById(id: string): any {
+  public getMeasureById(id: string): any {
     return this.http.get(this.url + id)
-      .map((res) => <Project> res.json())
+      .map((res) => <Measure> res.json())
       .catch(this.handleError);
   }
 
   /**
-   * Create a project
-   * @param project
+   * Create a measure
+   * @param measure
    * @returns {Observable<R>}
      */
-  public createProject(project: Project): any {
-    return this.http.post(this.url, project)
-      .map((res) => <Project> res.json())
+  public createMeasure(measure: Measure): any {
+    return this.http.post(this.url, measure)
+      .map((res) => <Measure> res.json())
       .catch(this.handleError);
   }
 
   /**
-   * Update a project
-   * @param project
+   * Update a measure
+   * @param measure
    * @returns {Observable<R>}
      */
-  public updateProject(project: Project): any {
-    return this.http.put(this.url, project)
-      .map((res) => <Project> res.json())
+  public updateMeasure(measure: Measure): any {
+    return this.http.put(this.url, measure)
+      .map((res) => <Measure> res.json())
       .catch(this.handleError);
   }
 
   /**
-   * Delete a project
+   * Delete a measure
    * @param id
    * @returns {Observable<R>}
      */
-  public deleteProject(id: string): any {
+  public deleteMeasure(id: string): any {
     return this.http.delete(this.url + id)
-      .map((res) => <Project> res.json())
+      .map((res) => <Measure> res.json())
       .catch(this.handleError);
   }
 
@@ -77,6 +77,6 @@ export class ProjectService {
      */
   private handleError(error: Response) {
     console.error(error);
-    return Observable.throw(error.json().error || 'ProjectService: Server error');
+    return Observable.throw(error.json().error || 'MeasureService: Server error');
   }
 }

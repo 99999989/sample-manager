@@ -45,8 +45,11 @@ export class Home {
 
   public registerUser(user:User) {
     this._userService.createUser(user).subscribe(
-      user => Materialize.toast('User erfolgreich erstellt!', 4000),
-      error =>  Materialize.toast(error, 4000)
+      user => {
+        Materialize.toast('User ' + user.email + 'erfolgreich erstellt!', 4000);
+        this.newUser = new User();
+      },
+        error =>  Materialize.toast(error, 4000)
     );
   }
 
