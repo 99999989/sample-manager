@@ -20,6 +20,7 @@ export class ProjectDetail {
   public project:Project;
   public showLoadingSpinner:boolean = true;
   public newMeasure:Measure;
+  public tempMeasure:Measure;
   public newValue:string;
   public modalParams = [{dismissible: false, complete: function(){$('.lean-overlay').hide();}}];
 
@@ -71,12 +72,12 @@ export class ProjectDetail {
     return counter;
   }
   public addAnswer() {
-    this.newMeasure.values.push(this.newValue);
+    this.tempMeasure.values.push(this.newValue);
     this.newValue = '';
   }
 
   public removeAnswer(value) {
-    this.newMeasure.values.splice(this.newMeasure.values.indexOf(value), 1);
+    this.tempMeasure.values.splice(this.tempMeasure.values.indexOf(value), 1);
   }
 
   public saveMeasure(measure:Measure) {
@@ -84,7 +85,6 @@ export class ProjectDetail {
       this._measureService.updateMeasure(measure).subscribe(
         measure => {
           Materialize.toast('Messung aktualisiert', 4000);
-          this.newMeasure = new Measure();
           this.refreshProject();
         },
         error =>  Materialize.toast(error, 4000)
@@ -93,7 +93,6 @@ export class ProjectDetail {
       this._measureService.createMeasure(measure).subscribe(
         measure => {
           Materialize.toast('Messung erstellt', 4000);
-          this.newMeasure = new Measure();
           this.refreshProject();
         },
         error =>  Materialize.toast(error, 4000)
