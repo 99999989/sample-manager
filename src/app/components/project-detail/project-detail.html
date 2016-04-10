@@ -42,10 +42,12 @@
           <span class="card-title"></span>
           <i class="medium material-icons">{{getIconByType(measure.type)}}</i>
           <h5 class="purple-text accent-4">{{measure.text}}</h5>
-
+          <p><span class="badge new">{{getAnswerCount(measure)}} Antwort{{getAnswerCount(measure) === 1 ? '' : 'en'}}</span></p>
           <p class="grey-text">{{measure.type}} - {{measure.values}}</p>
-          <p>{{measure.rules ? measure.rules.length : '0'}} Regel{{!measure.rules || measure.rules.length === 1 ? '' : 'n'}}</p>
-          <p>{{getAnswerCount(measure)}} Antwort{{getAnswerCount(measure) === 1 ? '' : 'en'}}</p>
+          <p *ngFor="#rule of measure.rules">
+            {{rule.repeats}} mal zwischen {{rule.begin}} und {{rule.end}} Uhr
+          </p>
+
         </div>
 
 
@@ -132,16 +134,18 @@
         </div>
 
         <div class="card-action">
-          <button materialize="leanModal" [materializeParams]="modalParams" (click)="measure.menu = 'Bearbeiten'; tempMeasure = measure;"
+          <button materialize="leanModal"
+                  [materializeParams]="modalParams"
+                  (click)="measure.menu = 'Bearbeiten'; tempMeasure = measure;"
                   class="btn-flat" data-target="createMeasure">
-            <i class="large material-icons">build</i>
+            <i class="material-icons">build</i>
           </button>
 
-          <button class="btn-flat activator" (click)="measure.menu = 'Regeln'"><i class="large material-icons">watch_later</i>
+          <!--<button class="btn-flat activator" (click)="measure.menu = 'Regeln'"><i class="large material-icons">watch_later</i>
+          </button>-->
+          <button class="btn-flat activator" (click)="measure.menu = 'Statistiken'"><i class="material-icons">equalizer</i>
           </button>
-          <button class="btn-flat activator" (click)="measure.menu = 'Statistiken'"><i class="large material-icons">donut_small</i>
-          </button>
-          <button class="btn-flat activator" (click)="measure.menu = 'Statistiken'"><i class="large material-icons">person_pin</i>
+          <button class="btn-flat activator" (click)="measure.menu = 'Statistiken'"><i class="material-icons">group</i>
           </button>
         </div>
 
@@ -185,21 +189,21 @@
       <div class="col s12 m12 l12">
         <div class="center-align">
           <span *ngFor="#value of tempMeasure.values">
-           <div class="chip">
+           <div class="chip" (click)="removeAnswer(value)" style="cursor: pointer">
              {{value}}
-             <i class="material-icons" (click)="removeAnswer(value)">close</i>
+             <i class="material-icons right">clear</i>
            </div>
           &nbsp;
           </span>
         </div>
         <form class="row">
-          <div class="input-field col s12 m12 l12">
+          <div class="input-field col s10 m10 l10">
             <input id="newValue" type="text" class="validate" [(ngModel)]="newValue">
             <label for="newValue">Antwort eingeben + ENTER</label>
           </div>
           <!--<i class="material-icons prefix">code</i>-->
-          <div style="visibility: hidden">
-            <button type="submit" class="btn waves-effect waves-light right" (click)="addAnswer()"><i
+          <div class="input-field col s2 m2 l2">
+            <button type="submit" class="btn waves-effect waves-light left" (click)="addAnswer()"><i
               class="material-icons">add</i></button>
           </div>
         </form>
@@ -218,19 +222,19 @@
           <td class="center-align">
             {{rule.begin}} Uhr
             <div class="range-field">
-              <input type="range" min="0" max="{{rule.end}}" [(ngModel)]="rule.begin"/>
+              <input type="range" min="0" max="{{rule.end}}" [(ngModel)]="rule.begin" (change)="rule.begin = $event.target.value"/>
             </div>
           </td>
           <td class=center-align>
             {{rule.end}} Uhr
             <div class="range-field">
-              <input type="range" min="{{rule.begin}}" max="24" [(ngModel)]="rule.end"/>
+              <input type="range" min="{{rule.begin}}" max="24" [(ngModel)]="rule.end" (change)="rule.end = $event.target.value"/>
             </div>
           </td>
           <td class="center-align">
             {{rule.repeats}} mal
             <div class="range-field">
-              <input type="range" min="0" max="10" [(ngModel)]="rule.repeats"/>
+              <input type="range" min="0" max="10" [(ngModel)]="rule.repeats" (change)="rule.repeats = $event.target.value"/>
             </div>
           </td>
         </tr>
@@ -262,7 +266,7 @@
       {{ tempMeasure._id ? 'Speichern' : 'Erstellen' }}
     </button>
     &nbsp;
-    <button class="modal-action modal-close waves-effect waves-yellow btn-flat">Abbrechen</button>
+    <button class="modal-action modal-close waves-effect waves-purple btn-flat">Abbrechen</button>
   </div>
 </div>
 
