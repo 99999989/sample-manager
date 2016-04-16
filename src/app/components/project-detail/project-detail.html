@@ -41,7 +41,7 @@
           </div>
           <span class="card-title"></span>
           <i class="medium material-icons">{{getIconByType(measure.type)}}</i>
-          <h5 class="purple-text accent-4">{{measure.text}}</h5>
+          <h5 class="black-text accent-4">{{measure.text}}</h5>
           <p><span class="badge new">{{getAnswerCount(measure)}} Antwort{{getAnswerCount(measure) === 1 ? '' : 'en'}}</span></p>
           <p class="grey-text">{{measure.type}} - {{measure.values}}</p>
           <p *ngFor="#rule of measure.rules">
@@ -157,8 +157,8 @@
 <!-- New measure modal -->
 <div id="createMeasure" class="modal" *ngIf="tempMeasure">
   <div class="modal-content">
-    <h4 class="purple-text">
-      <i class="left medium material-icons" style="font-size: 35px">{{getIconByType(tempMeasure.type)}}</i>
+    <h4 class="black-text">
+      <i class="left medium material-icons " style="font-size: 35px">{{getIconByType(tempMeasure.type)}}</i>
       <span>{{ tempMeasure._id ? 'Messung bearbeiten' : 'Neue Messung' }}</span>
     </h4>
     <div class="row">

@@ -1,109 +1,124 @@
 <br>
-
+<h3>Messungen</h3>
 <div class="row">
-  <div *ngIf="!authorized" class="card col l6 m6 s12">
-    <div class="card-content">
-      <!--
-      <div class="switch right">
-        <label>
 
-          <input type="checkbox" checked>
-          <span class="lever"></span>
-          Angemeldet bleiben
-        </label>
-      </div>
-      -->
-      <span class="card-title"></span>
-      <!--<i class="medium material-icons center">account_circle</i>-->
-      <h5 class="purple-text accent-4">Login</h5>
-
-
+  <div class="col l6 m6 s12">
+    <div class="black-text">
       <div class="row">
-        <div class="input-field col s12">
-          <i class="material-icons prefix">face</i>
-          <input id="login" type="text" class="validate" [(ngModel)]="login.login">
-          <label for="login">Username oder Email</label>
+        <div class="col s4 m4 l3 center-align pink-text">
+          <i class="material-icons medium">help</i>
         </div>
-        <div class="input-field col s12">
-          <i class="material-icons prefix">lock</i>
-          <input id="password" type="password" class="validate" [(ngModel)]="login.password">
-          <label for="password">Password</label>
+        <div class="col s8 m8 l9">
+          <h5>Viele Fragetypen</h5>
+          <p>Häufigkeit, Ja/Nein, Bewertung.</p><br>
         </div>
       </div>
-      <div class="switch left">
-        <label>
-
-          <input type="checkbox">
-          <span class="lever"></span>
-          Angemeldet bleiben
-        </label>
-      </div>
-      <p>&nbsp;</p>
-      <p>&nbsp;</p>
     </div>
-    <div class="card-action">
-      <a class="waves-effect waves-light btn" (click)="loginUser(login)">login</a>
-      <a class="waves-effect btn-flat activator">registrieren</a>
-    </div>
-    <div class="card-reveal">
-        <span class="card-title grey-text text-darken-4">Account erstellen<i
-          class="material-icons right">close</i></span>
-      <form class="col s12 card-content" novalidate>
-        <div class="row">
-          <div class="input-field col s12">
-            <i class="material-icons prefix">face</i>
-            <input id="email" type="email" class="validate" [(ngModel)]="newUser.email">
-            <label for="email">Email</label>
-          </div>
-          <div class="input-field col s12">
-            <i class="material-icons prefix">lock</i>
-            <input id="password" type="password" class="validate" [(ngModel)]="newUser.password">
-            <label for="password">Password</label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col s12">
-            <a class="waves-effect waves-light btn" (click)="registerUser(newUser)">registrieren</a>
-            <!--<a class="waves-effect btn-flat activator">zurück</a>-->
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <div *ngIf="authorized" class="card col l6 m6 s12">
-    <div class="card-content">
-      <span class="card-title"></span>
-      <!--<i class="medium material-icons center">account_circle</i>-->
-      <h5 class="purple-text accent-4">Profil</h5>
-
-      <p>{{user.email}}</p>
-      <p>{{user.username}}</p>
-      <p>{{user.email}}</p>
-      <p>&nbsp;</p>
-    </div>
-    <div class="card-action">
-      <a class="waves-effect waves-light btn" (click)="logoutUser()">logout</a>
-      <a class="waves-effect btn-flat activator">registrieren</a>
-    </div>
-
   </div>
 
   <div class="col l6 m6 s12">
-    <div class="card-panel purple lighten-2">
-        <span class="white-text">I am a very simple card. I am good at containing small bits of information.
-        I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
-        </span>
-    </div>
-    <div class="card-panel purple lighten-1">
-        <span class="white-text">I am a very simple card. I am good at containing small bits of information.
-        I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
-        </span>
-    </div>
-    <div class="card-panel purple">
-        <span class="white-text">I am a very simple card. I am good at containing small bits of information.
-        I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
-        </span>
+    <div class="black-text">
+      <div class="row">
+        <div class="col s4 m4 l3 center-align pink-text">
+          <i class="material-icons medium">my_location</i>
+        </div>
+        <div class="col s8 m8 l9">
+          <h5>Standortaufnahme</h5>
+          <p>I am a very simple card. I am good at containing small bits of information.</p>
+        </div>
+      </div>
     </div>
   </div>
+
+  <div class="col l6 m6 s12">
+    <div class="black-text">
+      <div class="row">
+        <div class="col s4 m4 l3 center-align pink-text">
+          <i class="material-icons medium">hearing</i>
+        </div>
+        <div class="col s8 m8 l9">
+          <h5>Geräuschmessung</h5>
+          <p>I am a very simple card. I am good at containing small bits of information.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Trigger -->
+<div class="divider"></div>
+<h3>Trigger</h3>
+<div class="row">
+
+
+  <div class="col l6 m6 s12">
+    <div class="black-text">
+      <div class="row">
+        <div class="col s4 m4 l3 center-align pink-text">
+          <i class="material-icons medium">watch_later</i>
+        </div>
+        <div class="col s8 m8 l9">
+          <h5>Random Time Trigger</h5>
+          <p>I am a very simple card. I am good at containing small bits of information.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col l6 m6 s12">
+    <div class="black-text">
+      <div class="row">
+        <div class="col s4 m4 l3 center-align pink-text">
+          <i class="material-icons medium">place</i>
+        </div>
+        <div class="col s8 m8 l9">
+          <h5>Location Trigger</h5>
+          <p>I am a very simple card. I am good at containing small bits of information.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col l6 m6 s12">
+    <div class="black-text">
+      <div class="row">
+        <div class="col s4 m4 l3 center-align pink-text">
+          <i class="material-icons medium">group</i>
+        </div>
+        <div class="col s8 m8 l9">
+          <h5>Social Trigger</h5>
+          <p>I am a very simple card. I am good at containing small bits of information.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col l6 m6 s12">
+    <div class="black-text">
+      <div class="row">
+        <div class="col s4 m4 l3 center-align pink-text">
+          <i class="material-icons medium">favorite</i>
+        </div>
+        <div class="col s8 m8 l9">
+          <h5>Health Trigger</h5>
+          <p>I am a very simple card. I am good at containing small bits of information.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col l6 m6 s12">
+    <div class="black-text">
+      <div class="row">
+        <div class="col s4 m4 l3 center-align pink-text">
+          <i class="material-icons medium">power</i>
+        </div>
+        <div class="col s8 m8 l9">
+          <h5>Externer Trigger</h5>
+          <p>I am a very simple card. I am good at containing small bits of information.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>

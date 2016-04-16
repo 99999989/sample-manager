@@ -8,6 +8,15 @@ import {HttpService} from './app/services/http-service';
 import {BrowserXhr} from 'angular2/http';
 import {CORSBrowserXHR} from './app/services/cors-browser-xhr';
 import {provide} from 'angular2/core';
+import {HashLocationStrategy} from 'angular2/router';
+import {LocationStrategy} from 'angular2/router';
+import {SharedService} from './app/services/shared-service';
 
-bootstrap(SampleManagerApp, [HTTP_PROVIDERS,provide(BrowserXhr, {useClass: CORSBrowserXHR}), ROUTER_PROVIDERS, HttpService])
-  .catch(err => console.error(err));
+bootstrap(SampleManagerApp, [
+  HTTP_PROVIDERS,
+  provide(BrowserXhr, {useClass: CORSBrowserXHR}),
+  ROUTER_PROVIDERS,
+  HttpService,
+  provide(LocationStrategy, {useClass: HashLocationStrategy},
+  SharedService)
+]).catch(err => console.error(err));

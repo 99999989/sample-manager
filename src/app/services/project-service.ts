@@ -11,6 +11,7 @@ import {HttpService} from './http-service';
 export class ProjectService {
   private url:string = 'api/projects/';
   private http:HttpService;
+  private
 
   constructor(private http: HttpService) {
     this.http = http;

@@ -1,7 +1,7 @@
-<h3>Projekte</h3>
+<!--<h3>Projekte</h3>-->
 
 <!-- Add new project -->
-<div class="row">
+<div class="row" style="margin-top: 1em">
   <div class="col s12">
     <button materialize="leanModal" [materializeParams]="params" class="waves-effect waves-light btn modal-trigger right" data-target="createProject">
       <i class="material-icons left">add</i> Projekt
@@ -65,7 +65,7 @@
 <!-- New project modal -->
 <div id="createProject" class="modal">
   <div class="modal-content">
-    <h4 class="purple-text">Neues Projekt</h4>
+    <h4 class="pink-text">Neues Projekt</h4>
 
     <div class="row">
       <div class="input-field col s12 m12 l12">
@@ -102,7 +102,7 @@
 <!-- Delete project confirm modal -->
 <div id="deleteProject" class="modal bottom-sheet">
   <div class="modal-content">
-    <h4 class="black-text">Projekt <strong class="purple-text">{{projectToDelete.name}}</strong> wirklich löschen?</h4>
+    <h4 class="black-text">Projekt <strong class="pink-text">{{projectToDelete.name}}</strong> wirklich löschen?</h4>
   </div>
   <div class="modal-footer">
     <button class="modal-action modal-close waves-effect waves-light btn" (click)="deleteProject(projectToDelete)">Löschen</button>&nbsp;

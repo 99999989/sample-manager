@@ -6,6 +6,9 @@ import {CHART_DIRECTIVES} from 'ng2-charts';
 import {ProjectService} from '../../services/project-service';
 import {Measure} from '../../models/measure';
 import {MeasureService} from '../../services/measure-service';
+import {Output} from 'angular2/core';
+import {EventEmitter} from 'angular2/core';
+import {SharedService} from '../../services/shared-service';
 
 @Component({
   selector: 'project-detail',
@@ -17,6 +20,7 @@ import {MeasureService} from '../../services/measure-service';
 })
 
 export class ProjectDetail {
+  @Output('projectName') onProjectChange = new EventEmitter();
   public project:Project;
   public showLoadingSpinner:boolean = true;
   public newMeasure:Measure;
@@ -29,7 +33,7 @@ export class ProjectDetail {
   private _measureService:MeasureService;
   private _routeParams:RouteParams;
 
-  constructor(routeParams:RouteParams, projectService:ProjectService, measureService:MeasureService, router:Router) {
+  constructor(routeParams:RouteParams, projectService:ProjectService, measureService:MeasureService, router:Router, private sharedService:SharedService) {
     this._router = router;
     this._projectService = projectService;
     this._measureService = measureService;
@@ -40,14 +44,22 @@ export class ProjectDetail {
     this.refreshProject();
   }
 
+  ngOnDestroy() {
+    this.sharedService.notify('currentProject', null)
+  }
+
   private refreshProject() {
     this._projectService.getProjectById(this._routeParams.get('projectId')).subscribe(
       project => {
         this.project = project;
         this.newMeasure = new Measure(project);
-        this.showLoadingSpinner = false;
+        this.onProjectChange.emit(project.name);
       },
-      error =>  Materialize.toast(error, 4000)
+      error =>  Materialize.toast(error, 4000),
+      () => {
+        this.showLoadingSpinner = false;
+        this.sharedService.notify<Project>('currentProject', this.project);
+      }
     );
   }
 
