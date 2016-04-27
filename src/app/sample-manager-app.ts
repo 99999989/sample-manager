@@ -16,6 +16,7 @@ import {ProjectDetail} from './components/project-detail/project-detail';
 import {WatcherInterface} from './interfaces/watcher-interface';
 import {SharedService} from './services/shared-service';
 import {Project} from './models/project';
+import {Measure} from './models/measure';
 
 @Component({
   selector: 'sample-manager-app',
@@ -51,7 +52,7 @@ import {Project} from './models/project';
   new Route({path: '/projekte/...', component: ProjectBrowser, name: 'Projekte'})
 ])
 
-export class SampleManagerApp implements WatcherInterface {
+export class SampleManagerApp {
   private _log:Logger = new Logger('SampleManagerAppTest');
 
   public params = [{
@@ -64,14 +65,16 @@ export class SampleManagerApp implements WatcherInterface {
   public login:LoginRequest = new LoginRequest();
   public authorized:boolean = false;
   public showLoadingSpinner:boolean = false;
-  public currentProject:string = '';
+  public currentProject:Project = null;
+  public currentMeasure:Measure = null;
 
   constructor(private _router:Router, private _userService:UserService, private _sharedService:SharedService) {
     this._log.info('constructor')(AppConfig);
   }
 
   ngOnInit() {
-    this._sharedService.subscribe('currentProject', this);
+    this._sharedService.subscribe('currentProject', new ProjectSubscriber(this));
+    this._sharedService.subscribe('currentMeasure', new MeasureSubscriber(this));
     this._userService.authorizeUser().subscribe(
       user => {
         this.user = user;
@@ -86,11 +89,11 @@ export class SampleManagerApp implements WatcherInterface {
     {name: 'Projekte', icon: 'class'}
   ];
 
-  public isActive(routeName) {
+  public isActive(routeName):boolean {
     return this._router.isRouteActive(this._router.generate([routeName]))
   }
 
-  public registerUser(user:User) {
+  public registerUser(user:User):void {
     this.showLoadingSpinner = true;
     this._userService.createUser(user).subscribe(
       user => {
@@ -105,7 +108,7 @@ export class SampleManagerApp implements WatcherInterface {
     );
   }
 
-  public loginUser(login:LoginRequest) {
+  public loginUser(login:LoginRequest):void {
     this.showLoadingSpinner = true;
     this._userService.loginUser(login).subscribe(
       user => {
@@ -113,15 +116,16 @@ export class SampleManagerApp implements WatcherInterface {
         this.user = user;
         this.authorized = true;
         $('#login').closeModal();
+        this.showLoadingSpinner = false;
       },
       error => {
         Materialize.toast(error, 4000);
-      },
-      () => this.showLoadingSpinner = false
+        this.showLoadingSpinner = false;
+      }
     );
   }
 
-  public logoutUser() {
+  public logoutUser():void {
     this.showLoadingSpinner = true;
     this._userService.logoutUser().subscribe(
       user => {
@@ -129,15 +133,28 @@ export class SampleManagerApp implements WatcherInterface {
         this.authorized = false;
         $('#login').closeModal();
         this.user = null;
+        this.showLoadingSpinner = false;
       },
       error => {
         Materialize.toast(error, 4000);
-      },
-      () => this.showLoadingSpinner = false
+        this.showLoadingSpinner = false;
+      }
     );
   }
+}
 
+class ProjectSubscriber implements WatcherInterface {
+  constructor(private sampleManagerApp:SampleManagerApp) {
+  }
   public onChange<Project>(subscriptionName:string, value:Project):void {
-    this.currentProject = value ? value.name : value;
+    this.sampleManagerApp.currentProject = value;
+  }
+}
+
+class MeasureSubscriber implements WatcherInterface {
+  constructor(private sampleManagerApp:SampleManagerApp) {
+  }
+  public onChange<Measure>(subscriptionName:string, value:Measure):void {
+    this.sampleManagerApp.currentMeasure = value;
   }
 }

@@ -7,6 +7,7 @@ import {Router} from "angular2/router";
 import {MaterializeDirective} from 'angular2-materialize/dist/index';
 import {Project} from '../../models/project';
 import {ProjectService} from '../../services/project-service';
+import {SharedService} from '../../services/shared-service';
 
 @Component({
   selector: 'project-list',
@@ -28,7 +29,7 @@ export class ProjectList {
   private _userService:UserService;
   private _projectService:ProjectService;
 
-  constructor(userService: UserService, projectService:ProjectService, router: Router) {
+  constructor(userService: UserService, projectService:ProjectService, router: Router, private sharedService:SharedService) {
     this._router = router;
     this._userService = userService;
     this._projectService = projectService;

@@ -1,63 +1,65 @@
 import {Component} from 'angular2/core';
 import {RouteParams, ROUTER_DIRECTIVES, Router} from 'angular2/router';
-import {Project} from "../../models/project";
+import {Measure} from "../../models/measure";
 import {MaterializeDirective} from 'angular2-materialize/dist/index';
-import {CHART_DIRECTIVES} from 'ng2-charts';
-import {ProjectService} from '../../services/project-service';
-import {Measure} from '../../models/measure';
 import {MeasureService} from '../../services/measure-service';
-import {Output} from 'angular2/core';
-import {EventEmitter} from 'angular2/core';
+import {Measure} from '../../models/measure';
 import {SharedService} from '../../services/shared-service';
+import {Project} from '../../models/project';
 
 @Component({
-  selector: 'project-detail',
-  templateUrl: 'app/components/project-detail/project-detail.html',
-  styleUrls: ['app/components/project-detail/project-detail.css'],
-  providers: [ProjectService, MeasureService],
+  selector: 'measure-detail',
+  templateUrl: 'app/components/measure-detail/measure-detail.html',
+  styleUrls: ['app/components/measure-detail/measure-detail.css'],
+  providers: [MeasureService],
   directives: [ROUTER_DIRECTIVES, MaterializeDirective],
   pipes: []
 })
 
-export class ProjectDetail {
-  public project:Project;
+export class MeasureDetail {
+  public measure:Measure;
   public showLoadingSpinner:boolean = true;
   public newMeasure:Measure;
-  public tempMeasure:Measure;
+  public tempMeasure:any;
   public newValue:string;
-  public modalParams = [{dismissible: false, complete: function(){$('.lean-overlay').hide();}}];
 
   private _router:Router;
-  private _projectService:ProjectService;
+  private _measureService:MeasureService;
   private _measureService:MeasureService;
   private _routeParams:RouteParams;
 
-  constructor(routeParams:RouteParams, projectService:ProjectService, measureService:MeasureService, router:Router, private sharedService:SharedService) {
+  constructor(routeParams:RouteParams, measureService:MeasureService, router:Router, private sharedService:SharedService) {
     this._router = router;
-    this._projectService = projectService;
     this._measureService = measureService;
     this._routeParams = routeParams;
   }
 
   ngOnInit() {
-    this.refreshProject();
+    if (this._routeParams.get('measureId') === 'neu') {
+      let project:Project = new Project();
+      project._id = this._routeParams.get('projectId');
+      this.tempMeasure = new Measure(project);
+    } else {
+      this.refreshMeasure();
+    }
+
   }
 
   ngOnDestroy() {
-    this.sharedService.notify('currentProject', null)
+    this.sharedService.notify<Measure>('currentMeasure', null);
+    this.sharedService.notify<Project>('currentProject', null);
   }
 
-  private refreshProject() {
-    this._projectService.getProjectById(this._routeParams.get('projectId')).subscribe(
-      project => {
-        this.project = project;
-        this.project.createdDate = new Date(this.project.created);
-        this.newMeasure = new Measure(project);
+  private refreshMeasure() {
+    this._measureService.getMeasureById(this._routeParams.get('measureId')).subscribe(
+      measure => {
+        this.tempMeasure = measure;
       },
       error =>  Materialize.toast(error, 4000),
       () => {
         this.showLoadingSpinner = false;
-        this.sharedService.notify<Project>('currentProject', this.project);
+        this.sharedService.notify<Measure>('currentMeasure', this.tempMeasure);
+        this.sharedService.notify<Project>('currentProject', this.tempMeasure.project);
       }
     );
   }
@@ -66,11 +68,7 @@ export class ProjectDetail {
     return measure.values.split(',');
   }
 
-  public saveData(question) {
-    //alert('data saved');
-  }
-
-  public getIconByType(type) {
+  public getIconByType(type):string {
     return type.trim() !== 'Lautstärke' ? type.trim() === 'Standort' ? 'place' : 'help_outline' : 'hearing'
   }
   public getAnswerCount(measure:Measure) {
@@ -96,7 +94,7 @@ export class ProjectDetail {
       this._measureService.updateMeasure(measure).subscribe(
         measure => {
           Materialize.toast('Messung aktualisiert', 4000);
-          this.refreshProject();
+          this.refreshMeasure();
         },
         error =>  Materialize.toast(error, 4000)
       );
@@ -104,7 +102,7 @@ export class ProjectDetail {
       this._measureService.createMeasure(measure).subscribe(
         measure => {
           Materialize.toast('Messung erstellt', 4000);
-          this.refreshProject();
+          this.refreshMeasure();
         },
         error =>  Materialize.toast(error, 4000)
       );
@@ -115,12 +113,8 @@ export class ProjectDetail {
   private doughnutChartData = [350, 450, 100];
   private doughnutChartType = 'Doughnut';
 
-  public navigateToMeasure(id:string) {
-    this._router.navigate(['MeasureDetail', {projectId: this._routeParams.get('projectId'), measureId: id}]);
-  }
-
   public navigateBack() {
-    this._router.navigate(['ProjectList'])
+    this._router.navigate(['MeasureList'])
   }
   public repeatEntries = [
     1,

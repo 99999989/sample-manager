@@ -3,11 +3,12 @@
   <nav class="grey">
     <!--<div class="brand"><img src="../assets/images/icon_inverted.png" height="45px" /></div>-->
     <div class="nav-wrapper" style="margin-left: 30px;">
-      <div class="col s12">
+      <divs class="col s12">
         <a href="#home" class="breadcrumb">Sample Manger</a>
-        <a *ngIf="isActive('Projekte')" href="#projekte" class="breadcrumb">Projekte</a>
-        <a *ngIf="isActive('Projekte') && currentProject" class="breadcrumb">{{currentProject}}</a>
-      </div>
+        <a *ngIf="isActive('Projekte')" href="#/projekte" class="breadcrumb">Projekte</a>
+        <a *ngIf="isActive('Projekte') && currentProject" href="#/projekte/{{currentProject ? currentProject._id : '?'}}" class="breadcrumb">{{currentProject ? currentProject.name : '?'}}</a>
+        <a *ngIf="isActive('Projekte') && currentProject && currentMeasure" class="breadcrumb">{{currentMeasure.text | slice:0:10}}{{currentMeasure.text.length > 10 ? '...' : ''}}</a>
+      </divs>
     </div>
 
     <a materialize="sideNav" [materializeParams]="[{edge:'left', menuWidth: 65, closeOnClick: false}]"

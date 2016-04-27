@@ -25,7 +25,7 @@
     </div>
   </div>
 </div>
-<div class="row" *ngIf="!showLoadingSpinner">
+<div class="row" *ngIf="!showLoadingSpinner && user">
   <div *ngFor="#project of user.projects" class="col s12 m6 l4">
     <div class="card">
       <div class="card-image waves-effect waves-block waves-light">
@@ -41,7 +41,7 @@
       </div>
       <a class="btn-floating project-detail btn-large waves-effect waves-light "
          (click)="navigateToProject(project._id)">
-        <i class="material-icons">description</i>
+        <i class="material-icons">mode_edit</i>
       </a>
       <div class="card-reveal">
         <span class="card-title grey-text text-darken-4">{{project.name}}
@@ -63,9 +63,9 @@
 
 
 <!-- New project modal -->
-<div id="createProject" class="modal">
+<div id="createProject" class="modal grey lighten-3">
   <div class="modal-content">
-    <h4 class="pink-text">Neues Projekt</h4>
+    <h4>Neues Projekt</h4>
 
     <div class="row">
       <div class="input-field col s12 m12 l12">
@@ -94,7 +94,7 @@
       -->
     </div>
   </div>
-  <div class="modal-footer">
+  <div class="modal-footer grey lighten-3">
     <button class="modal-action modal-close waves-effect waves-light btn" (click)="createProject(newProject)">Erstellen</button>&nbsp;
     <button class="modal-action modal-close waves-effect waves-yellow btn-flat">Abbrechen</button>
   </div>
