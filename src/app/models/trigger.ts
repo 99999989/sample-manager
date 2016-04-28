@@ -1,4 +1,4 @@
-export class Rule {
+export class Trigger {
   public _id:string;
   public begin:number;
   public end:number;

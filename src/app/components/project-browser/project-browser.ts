@@ -3,8 +3,8 @@ import {Router, RouteConfig, Route, ROUTER_DIRECTIVES} from 'angular2/router';
 
 import {ProjectDetail} from '../project-detail/project-detail';
 import {ProjectList} from "../project-list/project-list";
-import {Home} from '../home/home';
 import {MeasureDetail} from '../measure-detail/measure-detail';
+import {TriggerDetail} from '../trigger-detail/trigger-detail';
 
 @Component({
   selector: 'project-browser',
@@ -17,7 +17,8 @@ import {MeasureDetail} from '../measure-detail/measure-detail';
 
 @RouteConfig([
   new Route({ path: '/', component: ProjectList, name: 'ProjectList', useAsDefault: true }),
-  new Route({ path: '/:projectId/:measureId', component: MeasureDetail, name: 'MeasureDetail' }),
+  new Route({ path: '/:projectId/measure/:measureId', component: MeasureDetail, name: 'MeasureDetail' }),
+  new Route({ path: '/:projectId/trigger/:triggerId', component: TriggerDetail, name: 'TriggerDetail' }),
   new Route({ path: '/:projectId', component: ProjectDetail, name: 'ProjectDetail' })
 
 ])

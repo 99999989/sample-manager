@@ -94,7 +94,7 @@ export class MeasureDetail {
       this._measureService.updateMeasure(measure).subscribe(
         measure => {
           Materialize.toast('Messung aktualisiert', 4000);
-          this.refreshMeasure();
+          this.navigateBack();
         },
         error =>  Materialize.toast(error, 4000)
       );
@@ -102,16 +102,12 @@ export class MeasureDetail {
       this._measureService.createMeasure(measure).subscribe(
         measure => {
           Materialize.toast('Messung erstellt', 4000);
-          this.refreshMeasure();
+          this.navigateBack();
         },
         error =>  Materialize.toast(error, 4000)
       );
     }
   }
-  // Doughnut
-  private doughnutChartLabels = ['Download Sales', 'In-Store Sales', 'Mail-Order Sales'];
-  private doughnutChartData = [350, 450, 100];
-  private doughnutChartType = 'Doughnut';
 
   public navigateBack() {
     this._router.navigate(['MeasureList'])
