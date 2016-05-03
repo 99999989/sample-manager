@@ -30,4 +30,33 @@ export class SharedService {
     }
   }
 
+  public getIconByType(type:string):string {
+    switch (type) {
+      case 'yes_no':
+      case 'rating':
+      case 'frequency':
+      case 'open':
+            return 'help_outline';
+      case 'location':
+            return 'my_location';
+      case 'volume':
+            return 'hearing';
+      case 'and':
+            return 'call_merge';
+      case 'or':
+            return 'call_split';
+      case 'random':
+            return 'all_inclusive';
+      case 'place':
+            return 'place';
+      case 'social':
+        return 'group';
+      case 'health':
+        return 'favorite';
+      case 'external':
+        return 'power';
+
+    }
+  }
+
 }
