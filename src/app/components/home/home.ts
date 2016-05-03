@@ -23,5 +23,18 @@ export class Home {
   ngOnInit() {
   }
 
+  public openOverlay() {
+    $('.ripple').addClass("rippling");
+    $('.button-wrapper').addClass("clicked").delay(1500).queue(function () {
+      $('.layered-content').show();
+      $('.layered-content').addClass("active");
+    });
+  }
 
+  public closeOverlay() {
+      $('.button-wrapper').removeClass("clicked");
+      $('.ripple').removeClass("rippling");
+      $('.layered-content').removeClass("active");
+    $('.layered-content').hide();
+  }
 }
