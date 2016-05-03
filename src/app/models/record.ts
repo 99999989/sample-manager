@@ -1,13 +1,15 @@
 import {User} from './user';
-import {Rule} from "./rule";
+import {Trigger} from "./trigger";
+import {Measure} from './measure';
 
 export class Record {
   public _id:string;
   public created:string;
-  public answerValue:string;
-  public location:string;
+  public value:string;
+  public location:[number];
+  public answerDuration:number;
+  public measure:Measure;
   public user:User;
-  public rule:Rule;
 
   constructor() {
   }

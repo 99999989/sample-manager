@@ -6,6 +6,8 @@ import {TriggerService} from '../../services/trigger-service';
 import {Trigger} from '../../models/trigger';
 import {SharedService} from '../../services/shared-service';
 import {Project} from '../../models/project';
+import {TranslatePipe} from 'ng2-translate/ng2-translate';
+import {TimeSpanLocal} from '../../models/time-span-local';
 
 @Component({
   selector: 'trigger-detail',
@@ -13,7 +15,7 @@ import {Project} from '../../models/project';
   styleUrls: ['app/components/trigger-detail/trigger-detail.css'],
   providers: [TriggerService],
   directives: [ROUTER_DIRECTIVES, MaterializeDirective],
-  pipes: []
+  pipes: [TranslatePipe]
 })
 
 export class TriggerDetail {
@@ -22,6 +24,7 @@ export class TriggerDetail {
   public newTrigger:Trigger;
   public tempTrigger:any;
   public newValue:string;
+  public timeSpans:[any];
 
   private _router:Router;
   private _triggerService:TriggerService;
@@ -54,6 +57,7 @@ export class TriggerDetail {
     this._triggerService.getTriggerById(this._routeParams.get('triggerId')).subscribe(
       trigger => {
         this.tempTrigger = trigger;
+        this.decodeTimeSpans(this.tempTrigger);
       },
       error =>  Materialize.toast(error, 4000),
       () => {
@@ -64,54 +68,42 @@ export class TriggerDetail {
     );
   }
 
-  public getSelectableValues(trigger) {
-    return trigger.values.split(',');
+  public removeTimeSpan(timeSpan:TimeSpanLocal):void {
+    this.timeSpans.splice(this.timeSpans.indexOf(timeSpan), 1);
   }
+
+  public addTimeSpan():void {
+    this.timeSpans.push(new TimeSpanLocal());
+  }
+
+  private decodeTimeSpans(trigger:Trigger):void {
+    this.timeSpans = this._triggerService.decodeTimeSpans(trigger);
+  }
+
+  private encodeTimeSpans(trigger:Trigger, timeSpans:[TimeSpanLocal]):void {
+    this._triggerService.encodeTimeSpans(trigger, timeSpans);
+  }
+
 
   public getIconByType(type):string {
-    return type.trim() !== 'Lautstärke' ? type.trim() === 'Standort' ? 'place' : 'help_outline' : 'hearing'
-  }
-  public getAnswerCount(trigger:Trigger) {
-    let counter:number = 0;
-    if (trigger.rules && trigger.rules.length > 0) {
-      for (let i = 0; i < trigger.rules.length; i++) {
-        //counter += question.rules[i].answers.length;
-      }
-    }
-    return counter;
-  }
-  public addAnswer() {
-    this.tempTrigger.values.push(this.newValue);
-    this.newValue = '';
-  }
-
-  public removeAnswer(value) {
-    this.tempTrigger.values.splice(this.tempTrigger.values.indexOf(value), 1);
+    return this.sharedService.getIconByType(type);
   }
 
   public saveTrigger(trigger:Trigger) {
-    if (trigger._id) {
-      this._triggerService.updateTrigger(trigger).subscribe(
-        trigger => {
-          Materialize.toast('Trigger aktualisiert', 4000);
-          this.refreshTrigger();
-        },
-        error =>  Materialize.toast(error, 4000)
-      );
-    } else {
-      this._triggerService.createTrigger(trigger).subscribe(
-        trigger => {
-          Materialize.toast('Trigger erstellt', 4000);
-          this.refreshTrigger();
-        },
-        error =>  Materialize.toast(error, 4000)
-      );
-    }
+    this.encodeTimeSpans(trigger, this.timeSpans);
+    this._triggerService.updateTrigger(trigger).subscribe(
+      trigger => {
+        Materialize.toast('Trigger aktualisiert', 4000);
+        this.navigateBack();
+      },
+      error =>  Materialize.toast(error, 4000)
+    );
   }
 
   public navigateBack() {
-    this._router.navigate(['TriggerList'])
+    this._router.navigate(['ProjectDetail', {projectId: this._routeParams.get('projectId')}])
   }
+
   public repeatEntries = [
     1,
     2,

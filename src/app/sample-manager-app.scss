@@ -1,27 +1,19 @@
-* {
-  background: lightblue;
+h1, h2, h3, h4, h5 {
+  color: #1d1d1d;
 }
-$primary-color: color("materialize-blue", "lighten-2") !default;
-$primary-color-light: false !default;
-$primary-color-dark: false !default;
-@if not $primary-color-light {
-  $primary-color-light: lighten($primary-color, 15%);
+h5, h6 {
+  color: #1d1d1d;
 }
-@if not $primary-color-dark {
-  $primary-color-dark: darken($primary-color, 15%);
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
 }
-$secondary-color: color("purple", "lighten-1") !default;
-$success-color: color("green", "base") !default;
-$error-color: color("red", "base") !default;
 
-$link-color: color("light-blue", "darken-1") !default;
+main {
+  flex: 1 0 auto;
+}
 
-/*
-$md-font-url: "node_modules/ng2-material/dist/";
-@import "node_modules/ng2-material/dist/font";
-@import "node_modules/ng2-material/source/core";
-$md-primary: md-palette($md-brown, 500, 100, 700, $md-contrast-palettes);
-$md-accent: md-palette($md-deep-orange, 500, 300, 700, $md-contrast-palettes);
-@import "node_modules/ng2-material/source/components";
-*/
-
+footer.page-footer {
+  margin: 0;
+}

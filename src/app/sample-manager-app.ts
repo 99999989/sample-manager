@@ -2,7 +2,6 @@ import {Component} from 'angular2/core';
 import {Route, RouteConfig, ROUTER_DIRECTIVES, Router} from 'angular2/router'; //Router
 import {Home} from './components/home/home';
 import {About} from './components/about/about';
-import {RepoBrowser} from './components/repo-browser/repo-browser';
 import Logger from './utils/logger.service';
 import {AppConfig} from './app-config.ts';
 import {MaterializeDirective} from 'angular2-materialize';
@@ -17,34 +16,32 @@ import {WatcherInterface} from './interfaces/watcher-interface';
 import {SharedService} from './services/shared-service';
 import {Project} from './models/project';
 import {Measure} from './models/measure';
+import {TranslateService} from 'ng2-translate/ng2-translate';
+import {TranslatePipe} from 'ng2-translate/ng2-translate';
+import 'rxjs/add/observable/of';
+import {Trigger} from './models/trigger';
 
 @Component({
   selector: 'sample-manager-app',
-  providers: [UserService, SharedService],
+  providers: [UserService, SharedService, TranslateService],
   styleUrl: 'app/sample-manager-app.scss',
   styles: [
     `
-      .side-nav li {
-        padding: 0 !important;
-      }
+    .app-content {
+      padding-left: 65px;
+    }
+
+    @media only screen and (max-width : 992px) {
       .app-content {
-        padding-left: 65px;
+        padding-left: 0;
       }
-      @media only screen and (max-width : 992px) {
-        .app-content {
-          padding-left: 0;
-        }
-      }
-      .brand {
-        font-size: 16pt;
-        padding-left: 10px;
-        padding-top: 10px;
-      }
+    }
+
     `
   ],
   templateUrl: 'app/sample-manager-app.html',
   directives: [ROUTER_DIRECTIVES, MaterializeDirective, LoadingSpinner, NgClass, ProjectDetail],
-  pipes: []
+  pipes: [TranslatePipe]
 })
 
 @RouteConfig([
@@ -67,14 +64,21 @@ export class SampleManagerApp {
   public showLoadingSpinner:boolean = false;
   public currentProject:Project = null;
   public currentMeasure:Measure = null;
+  public currentTrigger:Trigger = null;
 
-  constructor(private _router:Router, private _userService:UserService, private _sharedService:SharedService) {
+  constructor(private _router:Router, private _userService:UserService, private _sharedService:SharedService,
+              private _translate:TranslateService) {
     this._log.info('constructor')(AppConfig);
+    // this language will be used as a fallback when a translation isn't found in the current language
+    this._translate.setDefaultLang('de');
+    // the lang to use, if the lang isn't available, it will use the current loader to get them
+    this._translate.use('de');
   }
 
   ngOnInit() {
     this._sharedService.subscribe('currentProject', new ProjectSubscriber(this));
     this._sharedService.subscribe('currentMeasure', new MeasureSubscriber(this));
+    this._sharedService.subscribe('currentTrigger', new TriggerSubscriber(this));
     this._userService.authorizeUser().subscribe(
       user => {
         this.user = user;
@@ -156,5 +160,13 @@ class MeasureSubscriber implements WatcherInterface {
   }
   public onChange<Measure>(subscriptionName:string, value:Measure):void {
     this.sampleManagerApp.currentMeasure = value;
+  }
+}
+
+class TriggerSubscriber implements WatcherInterface {
+  constructor(private sampleManagerApp:SampleManagerApp) {
+  }
+  public onChange<Trigger>(subscriptionName:string, value:Trigger):void {
+    this.sampleManagerApp.currentTrigger = value;
   }
 }

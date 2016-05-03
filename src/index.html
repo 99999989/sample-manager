@@ -6,22 +6,22 @@
     <meta charset=UTF-8>
   <title>Sample Manager</title>
   <base href="/">
-
-</head>
-<body class="grey lighten-3">
-
-<main>
-  <sample-manager-app>Loading...</sample-manager-app>
-</main>
+  <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.de"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.4.1/es5-shim.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.34.1/es6-shim.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Roboto:400,700italic,300' rel='stylesheet' type='text/css'>
   <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href='style.css' rel='stylesheet' type='text/css'>
   <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>-->
   <script src="vendor.bundle.js"></script>
   <script src="app.bundle.js"></script>
-</body>
-<footer class="page-footer">
+</head>
+<body class="grey lighten-3">
+
+<main>
+  <sample-manager-app><span style="left: 100px; top: 100px;">Loading...</span></sample-manager-app>
+</main>
+<footer class="page-footer grey lighten-2">
   <div class="container">
     <div class="row">
       <div class="col l6 s12">
@@ -46,5 +46,7 @@
   </div>
   -->
 </footer>
+</body>
+
 
 </html>

@@ -6,6 +6,8 @@ import {Observable} from 'rxjs/Observable';
 
 import {Trigger} from '../models/trigger';
 import {HttpService} from './http-service';
+import {TimeSpanLocal} from '../models/time-span-local';
+import {TimeSpan} from '../models/time-span';
 
 @Injectable()
 export class TriggerService {
@@ -68,6 +70,45 @@ export class TriggerService {
     return this.http.delete(this.url + id)
       .map((res) => <Trigger> res.json())
       .catch(this.handleError);
+  }
+
+  /**
+   * Decode the time spans from cron expressions
+   * @param trigger
+   * @returns {any}
+     */
+  public decodeTimeSpans(trigger: Trigger): [TimeSpanLocal] {
+    let timeSpans:[TimeSpanLocal] = [];
+    if (!trigger.timeSpans) {
+      return;
+    }
+    for (let i = 0; i < trigger.timeSpans.length; i++) {
+      let cronStart = trigger.timeSpans[i].cronStart.split(' ');
+      let cronEnd = trigger.timeSpans[i].cronEnd.split(' ');
+
+      timeSpans.push({
+        begin: parseInt(cronStart[2]),
+        end: parseInt(cronEnd[2]),
+        repeats: trigger.timeSpans[i].repeats
+      })
+    }
+    return timeSpans;
+  }
+
+  /**
+   * Encode the time spans to cron expressions
+   * @param trigger
+   * @param timeSpans
+     */
+  public encodeTimeSpans(trigger: Trigger, timeSpans: [TimeSpanLocal]):void {
+    trigger.timeSpans = [];
+    for (let i = 0; i < timeSpans.length; i++) {
+      let timeSpan = new TimeSpan();
+      timeSpan.cronStart = '0 0 ' + timeSpans[i].begin + '  1/1 * ? *';
+      timeSpan.cronEnd = '0 0 ' + timeSpans[i].end + '  1/1 * ? *';
+      timeSpan.repeats = timeSpans[i].repeats;
+      trigger.timeSpans.push(timeSpan);
+    }
   }
 
   /**
