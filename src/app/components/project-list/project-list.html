@@ -63,7 +63,7 @@
 
 
 <!-- New project modal -->
-<div id="createProject" class="modal grey lighten-3">
+<div id="createProject" class="modal">
   <div class="modal-content">
     <h4>Neues Projekt</h4>
 
@@ -73,25 +73,6 @@
         <input id="name" type="text" class="validate" [(ngModel)]="newProject.name" autofocus>
         <label for="name">Projektname</label>
       </div>
-      <!--
-      <div class="col s12 m12 l6">
-        <div class="file-field input-field">
-
-          <div class="btn">
-            <span>File</span>
-            <input type="file" [(ngModel)]="newProject.imageUrl">
-          </div>
-
-          <div class="file-path-wrapper">
-            <input class="file-path validate"
-                   type="text"
-                   placeholder="Eigenes Projektbild hochladen (optional)"
-                   [(ngModel)]="newProject.imageUrl">
-          </div>
-
-        </div>
-      </div>
-      -->
     </div>
   </div>
   <div class="modal-footer grey lighten-3">
@@ -108,4 +89,7 @@
     <button class="modal-action modal-close waves-effect waves-light btn" (click)="deleteProject(projectToDelete)">Löschen</button>&nbsp;
     <button class="modal-action modal-close waves-effect waves-yellow btn-flat">Abbrechen</button>
   </div>
+</div>
+<div class="help-image-project" *ngIf="!showLoadingSpinner && user && user.projects.length === 0">
+  <img src="../../../assets/images/help_project.png" class="help-image" />
 </div>

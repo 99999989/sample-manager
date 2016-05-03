@@ -8,3 +8,19 @@
   bottom: 20px;
   left: 20px;
 }
+
+.help-image-project {
+  text-align: right;
+
+}
+@media screen and (min-width: 993px) {
+  .help-image {
+    height:200px;
+  }
+}
+@media screen and (max-width: 993px) {
+  .help-image {
+    height:150px;
+  }
+}
+

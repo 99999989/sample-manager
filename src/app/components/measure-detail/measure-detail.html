@@ -10,24 +10,18 @@
                 [materializeParams]="[{constrainwidth: true}]"
                 class="dropdown-button btn right"
                 [attr.data-activates]="'myMeasure'">
-          <i class="left material-icons">{{getIconByType(tempMeasure.type)}}</i>{{tempMeasure.type}}
+          <i class="left material-icons">{{getIconByType(tempMeasure.type)}}</i>{{ 'measureType_' + tempMeasure.type | translate}}
         </button>
-        <ul id="myMeasure" class="dropdown-content">
-          <li><a (click)="tempMeasure.type = 'Ja / Nein '"><i class="left material-icons">help_outline</i>Ja / Nein </a>
-          </li>
-          <li><a (click)="tempMeasure.type = 'Häufigkeit'"><i class="left material-icons">help_outline</i>Häufigkeit</a>
-          </li>
-          <li><a (click)="tempMeasure.type = 'Bewertung '"><i class="left material-icons">help_outline</i>Bewertung </a>
-          </li>
-          <li class="divider"></li>
-          <li><a (click)="tempMeasure.type = 'Lautstärke'"><i class="left material-icons">hearing</i>Lautstärke</a></li>
-          <li><a (click)="tempMeasure.type = 'Standort  '"><i class="left material-icons">place</i>Standort </a></li>
-        </ul>
       </div>
       <div class="input-field col s12 m12 l12">
         <!--<i class="material-icons prefix">assessment</i>-->
-        <input id="name" type="text" class="validate" [(ngModel)]="tempMeasure.text" autofocus>
-        <label for="name">Fragetext eingeben</label>
+        <input id="alias" type="text" class="validate active" [(ngModel)]="tempMeasure.alias" autofocus>
+        <label for="alias">Alias</label>
+      </div>
+      <div class="input-field col s12 m12 l12">
+        <!--<i class="material-icons prefix">assessment</i>-->
+        <input id="text" type="text" class="validate active" [(ngModel)]="tempMeasure.text">
+        <label for="text">Fragetext</label>
       </div>
       <div class="col s12 m12 l12">
         <div class="center-align">
@@ -40,76 +34,32 @@
           </span>
         </div>
         <form class="row">
-          <div class="input-field col s10 m10 l10">
+          <div class="input-field col s12 m12 l12">
             <input id="newValue" type="text" class="validate" [(ngModel)]="newValue">
             <label for="newValue">Antwort eingeben + ENTER</label>
           </div>
           <!--<i class="material-icons prefix">code</i>-->
-          <div class="input-field col s2 m2 l2">
+          <div style="display: none">
             <button type="submit" class="btn waves-effect waves-light left" (click)="addAnswer()"><i
               class="material-icons">add</i></button>
           </div>
         </form>
       </div>
-      <table>
-        <thead>
-        <tr>
-          <th data-field="id" class="center-align"><i class="material-icons">first_page</i></th>
-          <th data-field="name" class="center-align"><i class="material-icons">last_page</i></th>
-          <th data-field="price" class="center-align"><i class="material-icons">replay</i></th>
-        </tr>
-        </thead>
-
-        <tbody>
-        <tr *ngFor="#rule of tempMeasure.rules">
-          <td class="center-align">
-            {{rule.begin}} Uhr
-            <div class="range-field">
-              <input type="range" min="0" max="{{rule.end}}" [(ngModel)]="rule.begin" (change)="rule.begin = $event.target.value"/>
-            </div>
-          </td>
-          <td class=center-align>
-            {{rule.end}} Uhr
-            <div class="range-field">
-              <input type="range" min="{{rule.begin}}" max="24" [(ngModel)]="rule.end" (change)="rule.end = $event.target.value"/>
-            </div>
-          </td>
-          <td class="center-align">
-            {{rule.repeats}} mal
-            <div class="range-field">
-              <input type="range" min="0" max="10" [(ngModel)]="rule.repeats" (change)="rule.repeats = $event.target.value"/>
-            </div>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-      <p>&nbsp;sdfas</p>
-      <!--
-      <div class="col s12 m12 l6">
-        <div class="file-field input-field">
-
-          <div class="btn">
-            <span>File</span>
-            <input type="file" [(ngModel)]="newProject.imageUrl">
-          </div>
-
-          <div class="file-path-wrapper">
-            <input class="file-path validate"
-                   type="text"
-                   placeholder="Eigenes Projektbild hochladen (optional)"
-                   [(ngModel)]="newProject.imageUrl">
-          </div>
-
-        </div>
+      <div class="input-field col s12">
+        <select materialize="material_select" [(ngModel)]="tempMeasure.trigger">
+          <option value="" disabled>Bitte wählen</option>
+          <option *ngFor="#trigger of project.triggers" value="{{trigger._id}}">{{trigger.alias}}</option>
+        </select>
+        <label>Trigger</label>
       </div>
-      -->
+
     </div>
   </div>
   <div class="card-action">
     <button class="modal-action modal-close waves-effect waves-light btn" (click)="saveMeasure(tempMeasure)">
-      {{ tempMeasure._id ? 'Speichern' : 'Erstellen' }}
+      Speichern
     </button>
     &nbsp;
-    <button class="modal-action modal-close waves-effect waves-purple btn-flat">Abbrechen</button>
+    <button class="modal-action modal-close waves-effect waves-purple btn-flat" (click)="navigateBack()">Abbrechen</button>
   </div>
 </div>

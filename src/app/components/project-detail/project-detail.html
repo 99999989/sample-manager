@@ -2,28 +2,23 @@
 <!-- Loading Spinner -->
 <loading-spinner [smTrigger]="showLoadingSpinner"></loading-spinner>
 
-
-<div class="input-field col s12">
-  <select multiple materialize="material_select">
-      <option value="" disabled>Bitte wählen</option>
-      <option value="1">Option 1</option>
-      <option value="2">Option 2</option>
-      <option value="3">Option 3</option>
-
-  </select>
-  <label>Materialize Multiple Select</label>
-</div>
-
 <div class="row" *ngIf="!showLoadingSpinner">
   <div class="col s12">
-    <h3>{{project.name}}</h3>
+    <h3 class="grey-text text-darken-1">{{project.name}}</h3>
     <div class="row">
-      <div class="col s4 grey-text text-darken-1">
-        <span class="material-icons left">first_page</span>
-        {{project.createdDate | date:'longDate'}}
+      <div class="col s6 grey-text text-darken-1">
+        Start: {{project.createdDate | date:'longDate'}}
       </div>
-      <div class="col s4">
+      <div class="col s4" *ngIf="!showLoadingSpinner && project && (project.measures.length === 0 || project.triggers.length === 0)">
 
+        <div class="help-image-task1">
+          <img src="../../../assets/images/task1.png" class="help-image" *ngIf="project.triggers.length === 0" />
+          <img src="../../../assets/images/task1_stroked.png" class="help-image" *ngIf="project.triggers.length > 0" />
+        </div>
+        <div class="help-image-task2">
+          <img src="../../../assets/images/task2.png" class="help-image" *ngIf="project.measures.length === 0" />
+          <img src="../../../assets/images/task2_stroked.png" class="help-image" *ngIf="project.measures.length > 0" />
+        </div>
       </div>
 
     </div>
@@ -32,8 +27,9 @@
 
   <div class="col s12">
     <ul class="tabs grey lighten-3" materialize="tabs">
-      <li class="tab col s6"><a href="#measures">Messungen</a></li>
-      <li class="tab col s6"><a href="#triggers">Trigger</a></li>
+      <li class="tab col s4"><a href="#triggers">Trigger</a></li>
+      <li class="tab col s4"><a href="#measures">Messungen</a></li>
+      <li class="tab col s4"><a href="#statistics">Statistiken</a></li>
     </ul>
   </div>
   <div id="measures" class="col s12">
@@ -43,26 +39,35 @@
       <!-- Add new Measure -->
       <div class="row">
         <div class="col s12">
-          <button materialize="leanModal" [materializeParams]="modalParams" (click)="tempMeasure = newMeasure;"
-                  class="waves-effect waves-light btn modal-trigger right" data-target="createMeasure">
-            <i class="material-icons left">add</i> Messung
-          </button>
+          <measure-modal [smProject]="project" (smChanged)="refreshProject()"></measure-modal>
         </div>
       </div>
       <div class="row">
         <div *ngFor="#measure of project.measures" class="col s12 m6 l6">
           <div class="card">
             <div class="card-content">
-              <p><span class="badge new">{{getAnswerCount(measure)}} Antwort{{getAnswerCount(measure) === 1 ? '' : 'en'}}</span></p>
 
-              <span class="card-title"></span>
+              <!--<span class="badge new">{{'measureType_' + measure.type | translate}}</span>-->
               <i class="medium material-icons">{{getIconByType(measure.type)}}</i>
-              <h5 class="black-text accent-4">{{measure.text}}</h5>
 
-              <p class="grey-text">{{measure.type}} - {{measure.values}}</p>
-              <p *ngFor="#rule of measure.rules">
-                {{rule.repeats}} mal zwischen {{rule.begin}} und {{rule.end}} Uhr
+              <span class="grey-text right" *ngIf="measure.trigger">
+                 <i class="right material-icons">{{getIconByType(getTriggerById(measure.trigger).type)}}</i> {{getTriggerById(measure.trigger).alias}}
+              </span>
+
+              <div class="card-title">{{measure.alias}}
+                <span class="pink-text right text-darken-1" style="font-size: small"> {{'measureType_' + measure.type | translate}}</span>
+              </div>
+
+              <p class="grey-text measure-text" *ngIf="measure.text">
+                <i class="left material-icons">help</i>
+                {{measure.text}}
               </p>
+              &nbsp;
+              <p class="grey-text" *ngIf="measure.values && measure.values.length > 0">
+                <i class="left material-icons">feedback</i>
+                <span>{{getMeasureValues(measure.values)}}</span>
+              </p>
+
 
             </div>
 
@@ -80,14 +85,17 @@
                   class="left material-icons">{{getIconByType(measure.type)}}</i>{{measure.type}}
                 </button>
                 <ul id="{{measure.id}}" class="dropdown-content">
-                  <li><a (click)="measure.type = 'Ja / Nein'"><i class="left material-icons">help_outline</i>Ja / Nein</a>
+                  <li><a (click)="measure.type = 'Ja / Nein'"><i class="left material-icons">help_outline</i>Ja /
+                    Nein</a>
                   </li>
                   <li><a (click)="measure.type = 'Häufigkeit'"><i class="left material-icons">help_outline</i>Häufigkeit</a>
                   </li>
-                  <li><a (click)="measure.type = 'Bewertung'"><i class="left material-icons">help_outline</i>Bewertung</a>
+                  <li><a (click)="measure.type = 'Bewertung'"><i
+                    class="left material-icons">help_outline</i>Bewertung</a>
                   </li>
                   <li class="divider"></li>
-                  <li><a (click)="measure.type = 'Lautstärke'"><i class="left material-icons">hearing</i>Lautstärke</a></li>
+                  <li><a (click)="measure.type = 'Lautstärke'"><i class="left material-icons">hearing</i>Lautstärke</a>
+                  </li>
                   <li><a (click)="measure.type = 'Lokalisierung'"><i class="left material-icons">place</i>Lokalisierung</a>
                   </li>
                 </ul>
@@ -118,23 +126,23 @@
                   </thead>
 
                   <tbody>
-                  <tr *ngFor="#rule of measure.rules">
+                  <tr *ngFor="#trigger of measure.triggers">
                     <td class="center-align">
-                      {{rule.begin}} Uhr
+                      {{trigger.begin}} Uhr
                       <div class="range-field">
-                        <input type="range" min="0" max="{{rule.end}}" [(ngModel)]="rule.begin"/>
+                        <input type="range" min="0" max="{{trigger.end}}" [(ngModel)]="trigger.begin"/>
                       </div>
                     </td>
                     <td class=center-align>
-                      {{rule.end}} Uhr
+                      {{trigger.end}} Uhr
                       <div class="range-field">
-                        <input type="range" min="{{rule.begin}}" max="24" [(ngModel)]="rule.end"/>
+                        <input type="range" min="{{trigger.begin}}" max="24" [(ngModel)]="trigger.end"/>
                       </div>
                     </td>
                     <td class="center-align">
-                      {{rule.repeats}} mal
+                      {{trigger.repeats}} mal
                       <div class="range-field">
-                        <input type="range" min="0" max="10" [(ngModel)]="rule.repeats"/>
+                        <input type="range" min="0" max="10" [(ngModel)]="trigger.repeats"/>
                       </div>
                     </td>
                   </tr>
@@ -148,177 +156,93 @@
 
 
             </div>
-            <a class="btn-floating measure-detail btn-large waves-effect waves-light "
-               (click)="navigateToMeasure(measure._id)">
-              <i class="material-icons">mode_edit</i>
-            </a>
+
             <div class="card-action">
-              <!--
-              <button materialize="leanModal"
-                      [materializeParams]="modalParams"
-                      /*(click)="measure.menu = 'Bearbeiten'; tempMeasure = measure;"*/
-                      class="btn-flat" data-target="createMeasure">
-                <i class="material-icons">build</i>
+              <a class="btn-floating measure-detail btn-large waves-effect waves-light "
+                 (click)="navigateToMeasure(measure._id)">
+                <i class="material-icons">mode_edit</i>
+              </a>
+
+              <button class="btn-flat activator" (click)="measure.menu = 'Statistiken'">
+                Auslösen
               </button>
-              -->
-              <!--<button class="btn-flat activator" (click)="measure.menu = 'Regeln'"><i class="large material-icons">watch_later</i>
-              </button>-->
-              <button (click)="navigateToMeasure(measure._id)"
-              class="btn-flat">
-              <i class="material-icons">build</i>
-              </button>
-              <button class="btn-flat activator" (click)="measure.menu = 'Statistiken'"><i class="material-icons">equalizer</i>
-              </button>
-              <button class="btn-flat activator" (click)="measure.menu = 'Statistiken'"><i class="material-icons">group</i>
+              <button class="btn-flat activator" (click)="measure.menu = 'Statistiken'">
+                Löschen
               </button>
             </div>
 
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- New measure modal -->
-    <div id="createMeasure" class="modal grey lighten-3" *ngIf="tempMeasure">
-      <div class="modal-content">
-        <h4 class="black-text">
-          <i class="left medium material-icons " style="font-size: 35px">{{getIconByType(tempMeasure.type)}}</i>
-          <span>{{ tempMeasure._id ? 'Messung bearbeiten' : 'Neue Messung' }}</span>
-        </h4>
-        <div class="row">
-          <div class="input-field col s12 m12 l12">
-            <button materialize="dropdown"
-                    [materializeParams]="[{constrainwidth: true}]"
-                    class="dropdown-button btn right"
-                    [attr.data-activates]="'myMeasure'">
-              <i class="left material-icons">{{getIconByType(tempMeasure.type)}}</i>{{tempMeasure.type}}
-            </button>
-            <ul id="myMeasure" class="dropdown-content">
-              <li><a (click)="tempMeasure.type = 'Ja / Nein '"><i class="left material-icons">help_outline</i>Ja / Nein </a>
-              </li>
-              <li><a (click)="tempMeasure.type = 'Häufigkeit'"><i class="left material-icons">help_outline</i>Häufigkeit</a>
-              </li>
-              <li><a (click)="tempMeasure.type = 'Bewertung '"><i class="left material-icons">help_outline</i>Bewertung </a>
-              </li>
-              <li class="divider"></li>
-              <li><a (click)="tempMeasure.type = 'Lautstärke'"><i class="left material-icons">hearing</i>Lautstärke</a></li>
-              <li><a (click)="tempMeasure.type = 'Standort  '"><i class="left material-icons">place</i>Standort </a></li>
-            </ul>
-          </div>
-          <div class="input-field col s12 m12 l12">
-            <!--<i class="material-icons prefix">assessment</i>-->
-            <input id="name" type="text" class="validate" [(ngModel)]="tempMeasure.text" autofocus>
-            <label for="name">Fragetext eingeben</label>
-          </div>
-          <div class="col s12 m12 l12">
-            <div class="center-align">
-          <span *ngFor="#value of tempMeasure.values">
-           <div class="chip" (click)="removeAnswer(value)" style="cursor: pointer">
-             {{value}}
-             <i class="material-icons right">clear</i>
-           </div>
-          &nbsp;
-          </span>
-            </div>
-            <form class="row">
-              <div class="input-field col s10 m10 l10">
-                <input id="newValue" type="text" class="validate" [(ngModel)]="newValue">
-                <label for="newValue">Antwort eingeben + ENTER</label>
-              </div>
-              <!--<i class="material-icons prefix">code</i>-->
-              <div class="input-field col s2 m2 l2">
-                <button type="submit" class="btn waves-effect waves-light left" (click)="addAnswer()"><i
-                  class="material-icons">add</i></button>
-              </div>
-            </form>
-          </div>
-          <table>
-            <thead>
-            <tr>
-              <th data-field="id" class="center-align"><i class="material-icons">first_page</i></th>
-              <th data-field="name" class="center-align"><i class="material-icons">last_page</i></th>
-              <th data-field="price" class="center-align"><i class="material-icons">replay</i></th>
-            </tr>
-            </thead>
-
-            <tbody>
-            <tr *ngFor="#rule of tempMeasure.rules">
-              <td class="center-align">
-                {{rule.begin}} Uhr
-                <div class="range-field">
-                  <input type="range" min="0" max="{{rule.end}}" [(ngModel)]="rule.begin" (change)="rule.begin = $event.target.value"/>
-                </div>
-              </td>
-              <td class=center-align>
-                {{rule.end}} Uhr
-                <div class="range-field">
-                  <input type="range" min="{{rule.begin}}" max="24" [(ngModel)]="rule.end" (change)="rule.end = $event.target.value"/>
-                </div>
-              </td>
-              <td class="center-align">
-                {{rule.repeats}} mal
-                <div class="range-field">
-                  <input type="range" min="0" max="10" [(ngModel)]="rule.repeats" (change)="rule.repeats = $event.target.value"/>
-                </div>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-          <!--
-          <div class="col s12 m12 l6">
-            <div class="file-field input-field">
-
-              <div class="btn">
-                <span>File</span>
-                <input type="file" [(ngModel)]="newProject.imageUrl">
-              </div>
-
-              <div class="file-path-wrapper">
-                <input class="file-path validate"
-                       type="text"
-                       placeholder="Eigenes Projektbild hochladen (optional)"
-                       [(ngModel)]="newProject.imageUrl">
-              </div>
-
-            </div>
-          </div>
-          -->
+        <div *ngIf="!showLoadingSpinner && project && project.measures.length === 0"
+             class="help-image-trigger-wrapper">
+          <img src="../../../assets/images/help_measure.png" class="help-image-trigger" />
         </div>
       </div>
-      <div class="modal-footer grey lighten-3">
-        <button class="modal-action modal-close waves-effect waves-light btn" (click)="saveMeasure(tempMeasure)">
-          {{ tempMeasure._id ? 'Speichern' : 'Erstellen' }}
-        </button>
-        &nbsp;
-        <button class="modal-action modal-close waves-effect waves-purple btn-flat">Abbrechen</button>
-      </div>
     </div>
 
-    <!--
-    <base-chart class="chart"
-                [data]="doughnutChartData"
-                [labels]="doughnutChartLabels"
-                [chartType]="doughnutChartType"
-                (chartHover)="chartHovered($event)"
-                (chartClick)="chartClicked($event)"></base-chart>
-                -->
-    <!--
-    <div class="row">
-      <div class="col s12">
-        <ul materialize="tabs" [materializeParams]="tabSelectionParams" class="tabs">
-          <li [class]="'tab col s3' + (tab.disabled?' disabled':'')" *ngFor="#tab of tabs">
-            <a [href]="'#'+tab.route" (click)="$event.preventDefault();routeTo(tab.route)">{{tab.name}}</a>
-          </li>
-        </ul>
-      </div>
-      <br/>
-      <router-outlet></router-outlet>
-    </div>
-    -->
 
   </div>
-  <div id="triggers" class="col s12">Test 2</div>
-  <div id="test3" class="col s12">Test 3</div>
-  <div id="test4" class="col s12">Test 4</div>
+  <div id="triggers" class="col s12">
+    <div class="row">
+      <div class="col s12">
+        <br>
+        <trigger-modal [smProject]="project" (smChanged)="refreshProject()"></trigger-modal>
+      </div>
+    </div>
+    <div class="row">
+      <div *ngFor="#trigger of project.triggers" class="col s12 m6 l6">
+        <div class="card">
+          <div class="card-content">
+            <!--
+            <span class="grey-text right">
+                 <i class="right material-icons">{{getIconByType(getTriggerById(measure.trigger).type)}}</i> {{getTriggerById(trigger.trigger).alias}}
+              </span>
+-->
+            <i class="medium material-icons">{{getIconByType(trigger.type)}}</i>
+
+            <div class="card-title">{{trigger.alias}}
+              <span class="pink-text right text-darken-1" style="font-size: small">
+                {{'triggerType_' + trigger.type | translate}}</span>
+            </div>
+
+            <div class="measure-text" *ngIf="trigger.type === 'random' || trigger.type === 'place' || trigger.type === 'social' || trigger.tpye === 'health'">
+              <div *ngFor="#cron of getDecodedTimeSpans(trigger)">
+                <p  class="grey-text">
+                  <i class="left material-icons">alarm</i>
+                  {{cron.repeats}} mal von {{cron.begin}} bis {{cron.end}} Uhr
+                </p>
+                &nbsp;
+              </div>
+            </div>
+
+
+
+          </div>
+
+          <div class="card-action">
+            <a class="btn-floating measure-detail btn-large waves-effect waves-light "
+               (click)="navigateToTrigger(trigger._id)">
+              <i class="material-icons">mode_edit</i>
+            </a>
+
+            <button class="btn-flat activator" (click)="measure.menu = 'Statistiken'">
+              Auslösen
+            </button>
+            <button class="btn-flat activator" (click)="measure.menu = 'Statistiken'">
+              Löschen
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="help-image-trigger-wrapper" *ngIf="!showLoadingSpinner && project && project.triggers.length === 0">
+        <img src="../../../assets/images/help_trigger.png" class="help-image-trigger" />
+      </div>
+    </div>
+  </div>
+  <div id="statistics" class="col s12">
+    <div class="help-image-statistics-wrapper">
+      <img src="../../../assets/images/nothing.png" class="help-image-statistics" />
+    </div>
+  </div>
 </div>
 

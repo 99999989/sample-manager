@@ -1,0 +1,15 @@
+{
+  "measureType_yes_no": "Ja / Nein",
+  "measureType_rating": "Bewertung",
+  "measureType_frequency": "Häufigkeit",
+  "measureType_open": "Offene Frage",
+  "measureType_location": "Standort",
+  "measureType_volume": "Lautstärke",
+  "triggerType_and": "UND",
+  "triggerType_or": "ODER",
+  "triggerType_place": "Ort",
+  "triggerType_random": "Intervall",
+  "triggerType_social": "Social Media",
+  "triggerType_health": "Gesundheit",
+  "triggerType_external": "Extern"
+}

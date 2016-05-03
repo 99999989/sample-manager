@@ -6,6 +6,7 @@ import {MeasureService} from '../../services/measure-service';
 import {Measure} from '../../models/measure';
 import {SharedService} from '../../services/shared-service';
 import {Project} from '../../models/project';
+import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
 @Component({
   selector: 'measure-detail',
@@ -13,15 +14,15 @@ import {Project} from '../../models/project';
   styleUrls: ['app/components/measure-detail/measure-detail.css'],
   providers: [MeasureService],
   directives: [ROUTER_DIRECTIVES, MaterializeDirective],
-  pipes: []
+  pipes: [TranslatePipe]
 })
 
 export class MeasureDetail {
   public measure:Measure;
   public showLoadingSpinner:boolean = true;
-  public newMeasure:Measure;
   public tempMeasure:any;
   public newValue:string;
+  public project:Project;
 
   private _router:Router;
   private _measureService:MeasureService;
@@ -54,6 +55,7 @@ export class MeasureDetail {
     this._measureService.getMeasureById(this._routeParams.get('measureId')).subscribe(
       measure => {
         this.tempMeasure = measure;
+        this.project = measure.project;
       },
       error =>  Materialize.toast(error, 4000),
       () => {
@@ -73,11 +75,7 @@ export class MeasureDetail {
   }
   public getAnswerCount(measure:Measure) {
     let counter:number = 0;
-    if (measure.rules && measure.rules.length > 0) {
-      for (let i = 0; i < measure.rules.length; i++) {
-        //counter += question.rules[i].answers.length;
-      }
-    }
+
     return counter;
   }
   public addAnswer() {
@@ -110,7 +108,7 @@ export class MeasureDetail {
   }
 
   public navigateBack() {
-    this._router.navigate(['MeasureList'])
+    this._router.navigate(['ProjectDetail', {projectId: this._routeParams.get('projectId')}])
   }
   public repeatEntries = [
     1,

@@ -1,5 +1,6 @@
 .card {
-  height: 300px;
+  min-height: 600px;
+  margin-top:2em
 }
 
 .card-action {

@@ -9,14 +9,19 @@ import {MeasureService} from '../../services/measure-service';
 import {Output} from 'angular2/core';
 import {EventEmitter} from 'angular2/core';
 import {SharedService} from '../../services/shared-service';
+import {TranslatePipe} from 'ng2-translate/ng2-translate';
+import {MeasureModal} from '../measure-modal/measure-modal';
+import {TriggerModal} from '../trigger-modal/trigger-modal';
+import {Trigger} from '../../models/trigger';
+import {TriggerService} from '../../services/trigger-service';
 
 @Component({
   selector: 'project-detail',
   templateUrl: 'app/components/project-detail/project-detail.html',
   styleUrls: ['app/components/project-detail/project-detail.css'],
-  providers: [ProjectService, MeasureService],
-  directives: [ROUTER_DIRECTIVES, MaterializeDirective],
-  pipes: []
+  providers: [ProjectService, MeasureService, TriggerService],
+  directives: [ROUTER_DIRECTIVES, MaterializeDirective, MeasureModal, TriggerModal],
+  pipes: [TranslatePipe]
 })
 
 export class ProjectDetail {
@@ -25,14 +30,18 @@ export class ProjectDetail {
   public newMeasure:Measure;
   public tempMeasure:Measure;
   public newValue:string;
-  public modalParams = [{dismissible: false, complete: function(){$('.lean-overlay').hide();}}];
 
   private _router:Router;
   private _projectService:ProjectService;
   private _measureService:MeasureService;
   private _routeParams:RouteParams;
 
-  constructor(routeParams:RouteParams, projectService:ProjectService, measureService:MeasureService, router:Router, private sharedService:SharedService) {
+  constructor(private routeParams:RouteParams,
+              private projectService:ProjectService,
+              private measureService:MeasureService,
+              private triggerService:TriggerService,
+              private router:Router,
+              private sharedService:SharedService) {
     this._router = router;
     this._projectService = projectService;
     this._measureService = measureService;
@@ -47,7 +56,7 @@ export class ProjectDetail {
     this.sharedService.notify('currentProject', null)
   }
 
-  private refreshProject() {
+  public refreshProject() {
     this._projectService.getProjectById(this._routeParams.get('projectId')).subscribe(
       project => {
         this.project = project;
@@ -62,6 +71,9 @@ export class ProjectDetail {
     );
   }
 
+  public getDecodedTimeSpans(trigger){
+    return this.triggerService.decodeTimeSpans(trigger);
+  }
   public getSelectableValues(measure) {
     return measure.values.split(',');
   }
@@ -71,17 +83,15 @@ export class ProjectDetail {
   }
 
   public getIconByType(type) {
-    return type.trim() !== 'Lautstärke' ? type.trim() === 'Standort' ? 'place' : 'help_outline' : 'hearing'
+    return this.sharedService.getIconByType(type);
   }
+
   public getAnswerCount(measure:Measure) {
     let counter:number = 0;
-    if (measure.rules && measure.rules.length > 0) {
-      for (let i = 0; i < measure.rules.length; i++) {
-        //counter += question.rules[i].answers.length;
-      }
-    }
+
     return counter;
   }
+
   public addAnswer() {
     this.tempMeasure.values.push(this.newValue);
     this.newValue = '';
@@ -110,19 +120,43 @@ export class ProjectDetail {
       );
     }
   }
-  // Doughnut
-  private doughnutChartLabels = ['Download Sales', 'In-Store Sales', 'Mail-Order Sales'];
-  private doughnutChartData = [350, 450, 100];
-  private doughnutChartType = 'Doughnut';
+
+  public getTriggerById(id:string):Trigger {
+    let triggers:[Trigger] = require('lodash').filter(this.project.triggers, function(trigger) {
+      return trigger._id === id;
+    });
+
+    if (!triggers || triggers.length === 0) {
+      return {};
+    }
+
+    return triggers[0];
+  }
+
+  public getMeasureValues(values:[string]):string {
+    let resultString:string = '';
+    for (let i = 0; i < values.length; i++) {
+      resultString += values[i];
+      if ((i + 1) < values.length) {
+        resultString += ' - ';
+      }
+    }
+    return resultString;
+  }
 
   public navigateToMeasure(id:string) {
     this._router.navigate(['MeasureDetail', {projectId: this._routeParams.get('projectId'), measureId: id}]);
   }
 
+  public navigateToTrigger(id:string) {
+    this._router.navigate(['TriggerDetail', {projectId: this._routeParams.get('projectId'), triggerId: id}]);
+  }
+
   public navigateBack() {
     this._router.navigate(['ProjectList'])
   }
-  public repeatEntries = [
+
+  public repeatEntries:[number] = [
     1,
     2,
     3,
@@ -133,7 +167,7 @@ export class ProjectDetail {
     8
   ];
 
-  public timeEntries = [
+  public timeEntries:[string] = [
     '06:00',
     '07:00',
     '08:00',
