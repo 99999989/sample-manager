@@ -14,13 +14,15 @@ import {MeasureModal} from '../measure-modal/measure-modal';
 import {TriggerModal} from '../trigger-modal/trigger-modal';
 import {Trigger} from '../../models/trigger';
 import {TriggerService} from '../../services/trigger-service';
+import {LoadingSpinner} from '../common/loading-spinner';
+import {ActionService} from '../../services/action-service';
 
 @Component({
   selector: 'project-detail',
   templateUrl: 'app/components/project-detail/project-detail.html',
   styleUrls: ['app/components/project-detail/project-detail.css'],
-  providers: [ProjectService, MeasureService, TriggerService],
-  directives: [ROUTER_DIRECTIVES, MaterializeDirective, MeasureModal, TriggerModal],
+  providers: [ProjectService, MeasureService, TriggerService, ActionService],
+  directives: [ROUTER_DIRECTIVES, MaterializeDirective, MeasureModal, TriggerModal, LoadingSpinner],
   pipes: [TranslatePipe]
 })
 
@@ -31,21 +33,13 @@ export class ProjectDetail {
   public tempMeasure:Measure;
   public newValue:string;
 
-  private _router:Router;
-  private _projectService:ProjectService;
-  private _measureService:MeasureService;
-  private _routeParams:RouteParams;
-
-  constructor(private routeParams:RouteParams,
-              private projectService:ProjectService,
-              private measureService:MeasureService,
-              private triggerService:TriggerService,
-              private router:Router,
-              private sharedService:SharedService) {
-    this._router = router;
-    this._projectService = projectService;
-    this._measureService = measureService;
-    this._routeParams = routeParams;
+  constructor(private _routeParams:RouteParams,
+              private _projectService:ProjectService,
+              private _measureService:MeasureService,
+              private _triggerService:TriggerService,
+              private _router:Router,
+              private _sharedService:SharedService,
+              private _actionService:ActionService) {
   }
 
   ngOnInit() {
@@ -53,10 +47,11 @@ export class ProjectDetail {
   }
 
   ngOnDestroy() {
-    this.sharedService.notify('currentProject', null)
+    this._sharedService.notify('currentProject', null)
   }
 
   public refreshProject() {
+    this.showLoadingSpinner = true;
     this._projectService.getProjectById(this._routeParams.get('projectId')).subscribe(
       project => {
         this.project = project;
@@ -66,13 +61,13 @@ export class ProjectDetail {
       error =>  Materialize.toast(error, 4000),
       () => {
         this.showLoadingSpinner = false;
-        this.sharedService.notify<Project>('currentProject', this.project);
+        this._sharedService.notify<Project>('currentProject', this.project);
       }
     );
   }
 
-  public getDecodedTimeSpans(trigger){
-    return this.triggerService.decodeTimeSpans(trigger);
+  public getDecodedTimeSpan(trigger){
+    return this._triggerService.decodeTimeSpan(trigger);
   }
   public getSelectableValues(measure) {
     return measure.values.split(',');
@@ -83,7 +78,7 @@ export class ProjectDetail {
   }
 
   public getIconByType(type) {
-    return this.sharedService.getIconByType(type);
+    return this._sharedService.getIconByType(type);
   }
 
   public getAnswerCount(measure:Measure) {
@@ -142,6 +137,15 @@ export class ProjectDetail {
       }
     }
     return resultString;
+  }
+
+  public triggerManual(measureId:string):void {
+    this._actionService.triggerManual(measureId).subscribe(
+      measure => {
+        Materialize.toast('Messung ' + measure.alias + ' ausgelöst', 4000);
+      },
+      error =>  Materialize.toast(error, 4000)
+    );
   }
 
   public navigateToMeasure(id:string) {

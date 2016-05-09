@@ -24,7 +24,7 @@ export class TriggerModal {
   @Input('smProject') project:Project;
   @Output('smChanged') changed = new EventEmitter();
 
-  public timeSpans:[TimeSpanLocal] = [new TimeSpanLocal()];
+  public timeSpan:TimeSpanLocal = new TimeSpanLocal();
   public showLoadingSpinner:boolean = true;
   public tempTrigger:any;
   public newValue:string;
@@ -59,15 +59,15 @@ export class TriggerModal {
   public removeAnswer(value) {
     this.tempTrigger.values.splice(this.tempTrigger.values.indexOf(value), 1);
   }
-
+/*
   public removeTimeSpan(timeSpan:TimeSpanLocal):void {
-    this.timeSpans.splice(this.timeSpans.indexOf(timeSpan), 1);
+    this.timeSpan.splice(this.timeSpan.indexOf(timeSpan), 1);
   }
 
   public addTimeSpan():void {
-    this.timeSpans.push(new TimeSpanLocal());
+    this.timeSpan.push(new TimeSpanLocal());
   }
-
+*/
   public step(value:number) {
     if (value === 1 && this.modalStep === 2 &&
       (this.tempTrigger.type === 'location' ||
@@ -87,15 +87,15 @@ export class TriggerModal {
     $('#createTrigger').closeModal();
   }
 
-  private encodeTimeSpans(trigger:Trigger):void {
-    this._triggerService.encodeTimeSpans(trigger, this.timeSpans);
+  private encodeTimeSpan(trigger:Trigger):void {
+    this._triggerService.encodeTimeSpan(trigger, this.timeSpan);
   }
 
   public saveTrigger(trigger:Trigger) {
-    this.encodeTimeSpans(trigger);
+    this.encodeTimeSpan(trigger);
     this._triggerService.createTrigger(trigger).subscribe(
       trigger => {
-        Materialize.toast('Trigger erstellt', 4000);
+        Materialize.toast('Trigger ' + trigger.alias + '  erstellt', 4000);
         $('#createTrigger').closeModal();
         this.changed.emit('event');
         this.initTrigger();

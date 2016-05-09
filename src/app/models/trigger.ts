@@ -4,7 +4,7 @@ export class Trigger {
   public _id:string;
   public name:string;
   public type:string;
-  public timeSpans:[TimeSpan];
+  public timeSpan:TimeSpan;
   public areaTrigger:string;
   public socialTrigger:string;
   public healthTrigger:string;
@@ -18,7 +18,7 @@ export class Trigger {
       timeSpan.cronStart = '0 0 8 1/1 * ? *';
       timeSpan.cronEnd = '0 0 18 1/1 * ? *';
       timeSpan.repeats = 1;
-      this.timeSpans = [timeSpan];
+      this.timeSpan = timeSpan;
   }
 }
 

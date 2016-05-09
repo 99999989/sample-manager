@@ -1,10 +1,14 @@
 <br>
 <!-- Loading Spinner -->
-<loading-spinner [smTrigger]="showLoadingSpinner"></loading-spinner>
+<div *ngIf="showLoadingSpinner">
+  <br>
+  <br>
+  <loading-spinner [smTrigger]="showLoadingSpinner"></loading-spinner>
+</div>
 
 <div class="row" *ngIf="!showLoadingSpinner">
   <div class="col s12">
-    <h3 class="grey-text text-darken-1">{{project.name}}</h3>
+    <h3 class="grey-text text-darken-1"><img src="{{project.imageUrl}}" height="32px" width="32px" class="circle" /> {{project.name}}</h3>
     <div class="row">
       <div class="col s6 grey-text text-darken-1">
         Start: {{project.createdDate | date:'longDate'}}
@@ -163,10 +167,10 @@
                 <i class="material-icons">mode_edit</i>
               </a>
 
-              <button class="btn-flat activator" (click)="measure.menu = 'Statistiken'">
+              <button class="btn-flat" (click)="triggerManual(measure._id)">
                 Auslösen
               </button>
-              <button class="btn-flat activator" (click)="measure.menu = 'Statistiken'">
+              <button class="btn-flat activator" >
                 Löschen
               </button>
             </div>
@@ -206,10 +210,10 @@
             </div>
 
             <div class="measure-text" *ngIf="trigger.type === 'random' || trigger.type === 'place' || trigger.type === 'social' || trigger.tpye === 'health'">
-              <div *ngFor="#cron of getDecodedTimeSpans(trigger)">
+              <div *ngIf="trigger.timeSpan">
                 <p  class="grey-text">
                   <i class="left material-icons">alarm</i>
-                  {{cron.repeats}} mal von {{cron.begin}} bis {{cron.end}} Uhr
+                  {{getDecodedTimeSpan(trigger).repeats}} mal von {{getDecodedTimeSpan(trigger).begin}} bis {{getDecodedTimeSpan(trigger).end}} Uhr
                 </p>
                 &nbsp;
               </div>

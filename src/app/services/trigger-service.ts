@@ -14,15 +14,15 @@ export class TriggerService {
   private url:string = 'api/triggers/';
   private http:HttpService;
 
-  constructor(private http: HttpService) {
+  constructor(private http:HttpService) {
     this.http = http;
   }
 
   /**
    * Get all triggers
    * @returns {Observable<R>}
-     */
-  public getTriggers(): any {
+   */
+  public getTriggers():any {
     return this.http.get(this.url)
       .map((res) => <Trigger[]> res.json())
       .catch(this.handleError);
@@ -32,8 +32,8 @@ export class TriggerService {
    * Get trigger by id
    * @param id
    * @returns {Observable<R>}
-     */
-  public getTriggerById(id: string): any {
+   */
+  public getTriggerById(id:string):any {
     return this.http.get(this.url + id)
       .map((res) => <Trigger> res.json())
       .catch(this.handleError);
@@ -43,8 +43,8 @@ export class TriggerService {
    * Create a trigger
    * @param trigger
    * @returns {Observable<R>}
-     */
-  public createTrigger(trigger: Trigger): any {
+   */
+  public createTrigger(trigger:Trigger):any {
     return this.http.post(this.url, trigger)
       .map((res) => <Trigger> res.json())
       .catch(this.handleError);
@@ -54,8 +54,8 @@ export class TriggerService {
    * Update a trigger
    * @param trigger
    * @returns {Observable<R>}
-     */
-  public updateTrigger(trigger: Trigger): any {
+   */
+  public updateTrigger(trigger:Trigger):any {
     return this.http.put(this.url, trigger)
       .map((res) => <Trigger> res.json())
       .catch(this.handleError);
@@ -65,8 +65,8 @@ export class TriggerService {
    * Delete a trigger
    * @param id
    * @returns {Observable<R>}
-     */
-  public deleteTrigger(id: string): any {
+   */
+  public deleteTrigger(id:string):any {
     return this.http.delete(this.url + id)
       .map((res) => <Trigger> res.json())
       .catch(this.handleError);
@@ -76,47 +76,41 @@ export class TriggerService {
    * Decode the time spans from cron expressions
    * @param trigger
    * @returns {any}
-     */
-  public decodeTimeSpans(trigger: Trigger): [TimeSpanLocal] {
-    let timeSpans:[TimeSpanLocal] = [];
-    if (!trigger.timeSpans) {
+   */
+  public decodeTimeSpan(trigger:Trigger):TimeSpanLocal {
+    if (!trigger.timeSpan) {
       return;
     }
-    for (let i = 0; i < trigger.timeSpans.length; i++) {
-      let cronStart = trigger.timeSpans[i].cronStart.split(' ');
-      let cronEnd = trigger.timeSpans[i].cronEnd.split(' ');
 
-      timeSpans.push({
-        begin: parseInt(cronStart[2]),
-        end: parseInt(cronEnd[2]),
-        repeats: trigger.timeSpans[i].repeats
-      })
-    }
-    return timeSpans;
+    let cronStart = trigger.timeSpan.cronStart.split(' ');
+    let cronEnd = trigger.timeSpan.cronEnd.split(' ');
+
+    return {
+      begin: parseInt(cronStart[2]),
+      end: parseInt(cronEnd[2]),
+      repeats: trigger.timeSpan.repeats
+    };
   }
 
   /**
    * Encode the time spans to cron expressions
    * @param trigger
-   * @param timeSpans
-     */
-  public encodeTimeSpans(trigger: Trigger, timeSpans: [TimeSpanLocal]):void {
-    trigger.timeSpans = [];
-    for (let i = 0; i < timeSpans.length; i++) {
-      let timeSpan = new TimeSpan();
-      timeSpan.cronStart = '0 0 ' + timeSpans[i].begin + '  1/1 * ? *';
-      timeSpan.cronEnd = '0 0 ' + timeSpans[i].end + '  1/1 * ? *';
-      timeSpan.repeats = timeSpans[i].repeats;
-      trigger.timeSpans.push(timeSpan);
-    }
+   * @param timeSpan
+   */
+  public encodeTimeSpan(trigger:Trigger, timeSpan:TimeSpanLocal):void {
+    trigger.timeSpan = {
+      cronStart: '0 0 ' + timeSpan.begin + '  1/1 * ? *',
+      cronEnd: '0 0 ' + timeSpan.end + '  1/1 * ? *',
+      repeats: timeSpan.repeats
+    };
   }
 
   /**
    * Handle request errors
    * @param error
    * @returns {Observable<T>}
-     */
-  private handleError(error: Response) {
+   */
+  private handleError(error:Response) {
     console.error(error);
     return Observable.throw(error.json().error || 'TriggerService: Server error');
   }

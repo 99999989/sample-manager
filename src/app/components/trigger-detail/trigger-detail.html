@@ -1,3 +1,11 @@
+<!-- Loading Spinner -->
+<div *ngIf="showLoadingSpinner">
+  <br>
+  <br>
+  <br>
+  <loading-spinner [smTrigger]="showLoadingSpinner"></loading-spinner>
+</div>
+
 <div class="card" *ngIf="tempTrigger">
   <div class="card-content">
     <div class="black-text card-title">
@@ -19,7 +27,7 @@
         <label for="alias">Alias</label>
       </div>
 
-      <table>
+      <table *ngIf="timeSpan">
         <thead>
         <tr>
           <th data-field="id" class="center-align"><i class="material-icons">first_page</i></th>
@@ -29,7 +37,7 @@
         </thead>
 
         <tbody>
-        <tr *ngFor="#timeSpan of timeSpans">
+        <tr>
           <td class="center-align">
             {{timeSpan.begin}} Uhr
             <div class="range-field">
@@ -47,21 +55,6 @@
             <div class="range-field">
               <input type="range" min="1" max="10" [(ngModel)]="timeSpan.repeats" (change)="timeSpan.repeats = $event.target.value"/>
             </div>
-          </td>
-          <td class="center-align">
-            <i (click)="removeTimeSpan(timeSpan)"
-               style="cursor: pointer"
-               class="material-icons pink-text small">clear</i>
-          </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td class="center-align">
-            <i (click)="addTimeSpan()"
-               style="cursor: pointer"
-               class="material-icons green-text small">add</i>
           </td>
         </tr>
         </tbody>

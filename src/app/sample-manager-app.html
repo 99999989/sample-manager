@@ -15,7 +15,6 @@
     <a materialize="sideNav" [materializeParams]="[{edge:'left', menuWidth: 65, closeOnClick: false}]"
        href="#" data-activates="slide-out" class="button-collapse" style="position: absolute;top: 0px;"><i class="material-icons">reorder</i></a>
 
-
     <button materialize="leanModal"
             [materializeParams]="params"
             class="btn modal-trigger right"
@@ -26,7 +25,8 @@
     </button>
 
     <ul id="slide-out" class="side-nav fixed">
-      <li *ngFor="#route of routes" [class]="isActive(route.name) ? 'active' : ''"><a [routerLink]="[route.name]"><span><i class="material-icons">{{route.icon}}</i></span></a></li>
+      <li [class]="isActive('Home') ? 'active' : ''"><a [routerLink]="['Home']"><span><i class="material-icons">home</i></span></a></li>
+      <li *ngIf="authorized" [class]="isActive('Projekte') ? 'active' : ''"><a [routerLink]="['Projekte']"><span><i class="material-icons">class</i></span></a></li>
     </ul>
 
   </nav>

@@ -1,9 +1,9 @@
 <br>
-<div class="help-image-login">
-  <img src="../../../assets/images/arrow.png" *ngIf="!authorized" class="help-image" />
+<div class="help-image-login" *ngIf="!authorized">
+  <img src="../../../assets/images/arrow.png" class="help-image" />
 </div>
-<div class="help-image-projects">
-  <img src="../../../assets/images/help_projects.png" *ngIf="!authorized" class="help-image" />
+<div class="help-image-projects" *ngIf="authorized">
+  <img src="../../../assets/images/help_projects.png" class="help-image" />
 </div>
 <div class="center-align">
   <h3 class="grey-text text-darken-1 svendroid-text">Hallo, ich bin <span class="pink-text text-darken-1" style="font-size: larger">Svendroid!</span></h3>

@@ -7,7 +7,7 @@ import {Input} from 'angular2/core';
 @Component({
   selector: 'loading-spinner',
   template: `
-<div class="center-align" *ngIf="trigger">
+<div class="loading-spinner center-align" *ngIf="trigger">
   <div class="preloader-wrapper big active">
     <div class="spinner-layer spinner-purple-only">
       <div class="circle-clipper left">

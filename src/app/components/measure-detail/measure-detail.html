@@ -1,3 +1,12 @@
+<!-- Loading Spinner -->
+<div *ngIf="showLoadingSpinner">
+  <br>
+  <br>
+  <br>
+  <loading-spinner [smTrigger]="showLoadingSpinner"></loading-spinner>
+</div>
+
+
 <div class="card" style="height: 600px;margin-top:2em" *ngIf="tempMeasure">
   <div class="card-content">
     <div class="black-text card-title">

@@ -6,6 +6,7 @@ import {WatcherInterface} from '../interfaces/watcher-interface';
 @Injectable()
 export class SharedService {
 
+  public loggedIn:boolean = false;
   private subscriptions:WatcherMap = {};
 
   constructor() {
@@ -27,6 +28,12 @@ export class SharedService {
       this.subscriptions[subscriptionName].push(watcher)
     } else {
       this.subscriptions[subscriptionName] = [watcher];
+    }
+  }
+
+  public unsubscribe(subscriptionName:string, watcher:WatcherInterface) {
+    if (this.subscriptions[subscriptionName]) {
+      this.subscriptions[subscriptionName].splice(this.subscriptions[subscriptionName].indexOf(watcher), 1)
     }
   }
 
@@ -58,5 +65,4 @@ export class SharedService {
 
     }
   }
-
 }

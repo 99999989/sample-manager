@@ -7,13 +7,14 @@ import {Measure} from '../../models/measure';
 import {SharedService} from '../../services/shared-service';
 import {Project} from '../../models/project';
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
+import {LoadingSpinner} from '../common/loading-spinner';
 
 @Component({
   selector: 'measure-detail',
   templateUrl: 'app/components/measure-detail/measure-detail.html',
   styleUrls: ['app/components/measure-detail/measure-detail.css'],
   providers: [MeasureService],
-  directives: [ROUTER_DIRECTIVES, MaterializeDirective],
+  directives: [ROUTER_DIRECTIVES, MaterializeDirective, LoadingSpinner],
   pipes: [TranslatePipe]
 })
 
@@ -52,6 +53,7 @@ export class MeasureDetail {
   }
 
   private refreshMeasure() {
+    this.showLoadingSpinner = true;
     this._measureService.getMeasureById(this._routeParams.get('measureId')).subscribe(
       measure => {
         this.tempMeasure = measure;

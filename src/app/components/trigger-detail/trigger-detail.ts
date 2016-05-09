@@ -8,13 +8,14 @@ import {SharedService} from '../../services/shared-service';
 import {Project} from '../../models/project';
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 import {TimeSpanLocal} from '../../models/time-span-local';
+import {LoadingSpinner} from '../common/loading-spinner';
 
 @Component({
   selector: 'trigger-detail',
   templateUrl: 'app/components/trigger-detail/trigger-detail.html',
   styleUrls: ['app/components/trigger-detail/trigger-detail.css'],
   providers: [TriggerService],
-  directives: [ROUTER_DIRECTIVES, MaterializeDirective],
+  directives: [ROUTER_DIRECTIVES, MaterializeDirective, LoadingSpinner],
   pipes: [TranslatePipe]
 })
 
@@ -24,7 +25,7 @@ export class TriggerDetail {
   public newTrigger:Trigger;
   public tempTrigger:any;
   public newValue:string;
-  public timeSpans:[any];
+  public timeSpan:any;
 
   private _router:Router;
   private _triggerService:TriggerService;
@@ -38,6 +39,7 @@ export class TriggerDetail {
   }
 
   ngOnInit() {
+    this.showLoadingSpinner = true;
     if (this._routeParams.get('triggerId') === 'neu') {
       let project:Project = new Project();
       project._id = this._routeParams.get('projectId');
@@ -54,10 +56,11 @@ export class TriggerDetail {
   }
 
   private refreshTrigger() {
+    this.showLoadingSpinner = true;
     this._triggerService.getTriggerById(this._routeParams.get('triggerId')).subscribe(
       trigger => {
         this.tempTrigger = trigger;
-        this.decodeTimeSpans(this.tempTrigger);
+        this.decodeTimeSpan(this.tempTrigger);
       },
       error =>  Materialize.toast(error, 4000),
       () => {
@@ -68,32 +71,23 @@ export class TriggerDetail {
     );
   }
 
-  public removeTimeSpan(timeSpan:TimeSpanLocal):void {
-    this.timeSpans.splice(this.timeSpans.indexOf(timeSpan), 1);
+  private decodeTimeSpan(trigger:Trigger):void {
+    this.timeSpan = this._triggerService.decodeTimeSpan(trigger);
   }
 
-  public addTimeSpan():void {
-    this.timeSpans.push(new TimeSpanLocal());
+  private encodeTimeSpan(trigger:Trigger, timeSpan:TimeSpanLocal):void {
+    this._triggerService.encodeTimeSpan(trigger, timeSpan);
   }
-
-  private decodeTimeSpans(trigger:Trigger):void {
-    this.timeSpans = this._triggerService.decodeTimeSpans(trigger);
-  }
-
-  private encodeTimeSpans(trigger:Trigger, timeSpans:[TimeSpanLocal]):void {
-    this._triggerService.encodeTimeSpans(trigger, timeSpans);
-  }
-
 
   public getIconByType(type):string {
     return this.sharedService.getIconByType(type);
   }
 
   public saveTrigger(trigger:Trigger) {
-    this.encodeTimeSpans(trigger, this.timeSpans);
+    this.encodeTimeSpan(trigger, this.timeSpan);
     this._triggerService.updateTrigger(trigger).subscribe(
       trigger => {
-        Materialize.toast('Trigger aktualisiert', 4000);
+        Materialize.toast('Trigger ' + trigger.alias + ' aktualisiert', 4000);
         this.navigateBack();
       },
       error =>  Materialize.toast(error, 4000)

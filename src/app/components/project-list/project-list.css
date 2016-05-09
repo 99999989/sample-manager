@@ -6,7 +6,23 @@
 .btn-floating.project-delete {
   position: absolute;
   bottom: 20px;
-  left: 20px;
+  right: 20px;
+}
+.btn-floating.project-renew {
+  position: absolute;
+  bottom: 20px;
+  right: 70px;
+}
+
+.btn-floating.project-start {
+  position: absolute;
+  bottom: 20px;
+  right: 120px;
+}
+.btn-floating.project-restart {
+  position: absolute;
+  bottom: 20px;
+  right: 170px;
 }
 
 .help-image-project {

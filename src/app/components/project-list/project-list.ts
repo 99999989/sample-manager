@@ -8,12 +8,13 @@ import {MaterializeDirective} from 'angular2-materialize/dist/index';
 import {Project} from '../../models/project';
 import {ProjectService} from '../../services/project-service';
 import {SharedService} from '../../services/shared-service';
+import {ActionService} from '../../services/action-service';
 
 @Component({
   selector: 'project-list',
   templateUrl: 'app/components/project-list/project-list.html',
   styleUrls: ['app/components/project-list/project-list.css'],
-  providers: [UserService, ProjectService],
+  providers: [UserService, ProjectService, ActionService],
   directives: [ROUTER_DIRECTIVES, MaterializeDirective],
   pipes: []
 })
@@ -25,14 +26,14 @@ export class ProjectList {
   public projectToDelete:Project = new Project();
   public params = [{dismissible: false, complete: function(){$('.lean-overlay').hide();}}];
   private errorMessage;
-  private _router:Router;
-  private _userService:UserService;
-  private _projectService:ProjectService;
 
-  constructor(userService: UserService, projectService:ProjectService, router: Router, private sharedService:SharedService) {
-    this._router = router;
-    this._userService = userService;
-    this._projectService = projectService;
+
+  constructor(private _userService: UserService,
+              private _projectService:ProjectService,
+              private _router: Router,
+              private _sharedService:SharedService,
+              private _actionService:ActionService) {
+
   }
 
   private refreshUser() {
@@ -66,6 +67,36 @@ export class ProjectList {
       project => {
         Materialize.toast('Projekt ' + project.name + ' gelöscht', 4000);
         this.refreshUser();
+      },
+      error =>  Materialize.toast(error, 4000)
+    );
+  }
+
+  public startProject(project:Project) {
+    this._actionService.startProject(project._id).subscribe(
+      project => {
+        Materialize.toast('Projekt ' + project.name + ' gestartet', 4000);
+      },
+      error =>  Materialize.toast(error, 4000)
+    );
+  }
+
+  public restartProject(project:Project) {
+    this._actionService.restartProject(project._id).subscribe(
+      project => {
+        Materialize.toast('Projekt ' + project.name + ' neu gestartet', 4000);
+      },
+      error =>  Materialize.toast(error, 4000)
+    );
+  }
+
+  public generateNewColor(project:Project) {
+    let randomColor = (0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
+    project.imageUrl = 'http://dummyimage.com/300x100/' + /*'64B5F6'*/ randomColor + '/000d.png&text=+'
+
+    this._projectService.updateProject(project).subscribe(
+      project => {
+        Materialize.toast('Projekt ' + project.name + ' neu eingefärbt', 4000);
       },
       error =>  Materialize.toast(error, 4000)
     );

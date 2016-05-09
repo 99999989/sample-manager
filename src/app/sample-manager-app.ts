@@ -20,10 +20,11 @@ import {TranslateService} from 'ng2-translate/ng2-translate';
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 import 'rxjs/add/observable/of';
 import {Trigger} from './models/trigger';
+import {LoadingBar} from './components/common/loading-bar';
 
 @Component({
   selector: 'sample-manager-app',
-  providers: [UserService, SharedService, TranslateService],
+  providers: [UserService, TranslateService],
   styleUrl: 'app/sample-manager-app.scss',
   styles: [
     `
@@ -40,7 +41,7 @@ import {Trigger} from './models/trigger';
     `
   ],
   templateUrl: 'app/sample-manager-app.html',
-  directives: [ROUTER_DIRECTIVES, MaterializeDirective, LoadingSpinner, NgClass, ProjectDetail],
+  directives: [ROUTER_DIRECTIVES, MaterializeDirective, LoadingSpinner, LoadingBar, NgClass, ProjectDetail],
   pipes: [TranslatePipe]
 })
 
@@ -83,15 +84,12 @@ export class SampleManagerApp {
       user => {
         this.user = user;
         this.authorized = true;
+        this._sharedService.loggedIn = true;
+        this._sharedService.notify<boolean>('loginStatus', true);
       },
       error =>  Materialize.toast(error, 2000)
     );
   }
-
-  private routes = [
-    {name: 'Home', icon: 'home'},
-    {name: 'Projekte', icon: 'class'}
-  ];
 
   public isActive(routeName):boolean {
     return this._router.isRouteActive(this._router.generate([routeName]))
@@ -119,6 +117,7 @@ export class SampleManagerApp {
         Materialize.toast((user.username || user.email) + ' eingeloggt!', 2000);
         this.user = user;
         this.authorized = true;
+        this._sharedService.notify<boolean>('loginStatus', true);
         $('#login').closeModal();
         this.showLoadingSpinner = false;
       },
@@ -138,6 +137,8 @@ export class SampleManagerApp {
         $('#login').closeModal();
         this.user = null;
         this.showLoadingSpinner = false;
+        this._sharedService.notify<boolean>('loginStatus', false);
+        this._router.navigate(['Home']);
       },
       error => {
         Materialize.toast(error, 4000);

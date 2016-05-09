@@ -36,8 +36,8 @@
 
       <div class="card-content">
 
-        <p>{{project.measures.length}} Fragen</p>
-        <p>{{project.users.length}} Teilnehmer</p>
+        <p>{{project.measures.length}} Messungen</p>
+        <p>{{project.triggers.length}} Trigger</p>
       </div>
       <a class="btn-floating project-detail btn-large waves-effect waves-light "
          (click)="navigateToProject(project._id)">
@@ -48,14 +48,50 @@
           <i class="material-icons right">close</i>
         </span>
 
+        <button *ngIf="!project.start"
+                materialize="leanModal"
+                [materializeParams]="params"
+                class="waves-effect waves-light btn-floating project-start modal-trigger card-title tooltipped"
+                data-target="startProject"
+                (click)="projectToDelete = project">
+          <i class="material-icons"
+             materialize="tooltip"
+             data-position="top"
+             data-delay="100"
+             data-tooltip="Starten">play_arrow</i>
+        </button>
+        <button *ngIf="project.start"
+                class="waves-effect waves-light btn-floating project-start modal-trigger card-title tooltipped"
+                (click)="restartProject(project)">
+          <i class="material-icons"
+             materialize="tooltip"
+             data-position="top"
+             data-delay="100"
+             data-tooltip="Neu starten">repeat</i>
+        </button>
         <button materialize="leanModal"
                 [materializeParams]="params"
-                class="waves-effect waves-light btn-floating project-delete modal-trigger red left card-title"
+                class="waves-effect waves-light btn-floating project-delete modal-trigger card-title tooltipped"
                 data-target="deleteProject"
                 (click)="projectToDelete = project">
-          <i class="material-icons">delete_forever</i>
+
+          <i class="material-icons"
+             materialize="tooltip"
+             data-position="top"
+             data-delay="100"
+             data-tooltip="Löschen">delete_forever</i>
+
         </button>
-        <p *ngFor="#question of project.questions">{{question.text}}</p>
+        <button class="waves-effect waves-light btn-floating project-renew tooltipped"
+                (click)="generateNewColor(project)"
+                materialize="tooltip"
+                data-position="top"
+                data-delay="100"
+                data-tooltip="Neu einfärben">
+
+          <i class="material-icons">autorenew</i>
+
+        </button>
       </div>
     </div>
   </div>
@@ -90,6 +126,17 @@
     <button class="modal-action modal-close waves-effect waves-yellow btn-flat">Abbrechen</button>
   </div>
 </div>
+<!-- Start project confirm modal -->
+<div id="startProject" class="modal bottom-sheet">
+  <div class="modal-content">
+    <h4 class="black-text">Projekt <strong class="pink-text">{{projectToDelete.name}}</strong> wirklich starten?</h4>
+  </div>
+  <div class="modal-footer">
+    <button class="modal-action modal-close waves-effect waves-light btn" (click)="startProject(projectToDelete)">Starten</button>&nbsp;
+    <button class="modal-action modal-close waves-effect waves-yellow btn-flat">Abbrechen</button>
+  </div>
+</div>
+<!-- Help image -->
 <div class="help-image-project" *ngIf="!showLoadingSpinner && user && user.projects.length === 0">
   <img src="../../../assets/images/help_project.png" class="help-image" />
 </div>
