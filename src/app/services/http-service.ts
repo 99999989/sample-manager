@@ -4,12 +4,12 @@ import {Http, Headers} from 'angular2/http';
 
 @Injectable()
 export class HttpService {
-  private _http:Http;
   private host:string = 'https://mighty-everglades-95815.herokuapp.com/';
   //private host:string = 'http://localhost:3001/';
-  constructor(private http: Http) {
-    this._http = http;
+
+  constructor(private _http: Http) {
   }
+
   private createHeaders() {
     let headers = new Headers();
     headers.append('content-type', 'application/json');

@@ -9,6 +9,7 @@ import {User} from '../models/user';
 import {LoginRequest} from '../models/login-request';
 import {Headers} from 'angular2/http';
 import {HttpService} from './http-service';
+import {Project} from '../models/project';
 
 @Injectable()
 export class UserService {
@@ -48,6 +49,17 @@ export class UserService {
   public createUser(user: User): any {
     return this.http.post(this.url, user)
       .map((res) => <User> res.json())
+      .catch(this.handleError);
+  }
+
+  /**
+   * Create a users for project
+   * @param users
+   * @returns {Observable<R>}
+   */
+  public createUsersForProject(users: User[]): any {
+    return this.http.post(this.url + '/project', users)
+      .map((res) => <User[]> res.json())
       .catch(this.handleError);
   }
 

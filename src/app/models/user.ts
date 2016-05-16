@@ -1,11 +1,13 @@
 import {Project} from './project';
 
 export class User {
-  private id:string;
-  private username:string;
-  private email:string;
-  private password:string;
-  private projects:Project[];
+  public _id:string;
+  public username:string;
+  public email:string;
+  public password:string;
+  public gcmToken:string;
+  public projects:any[];
+  public checked:boolean;
 
   constructor() {
   }

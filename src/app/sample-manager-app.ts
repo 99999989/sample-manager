@@ -47,7 +47,8 @@ import {LoadingBar} from './components/common/loading-bar';
 
 @RouteConfig([
   new Route({path: '/home', component: Home, name: 'Home', useAsDefault: true}),
-  new Route({path: '/projekte/...', component: ProjectBrowser, name: 'Projekte'})
+  new Route({path: '/projekte/...', component: ProjectBrowser, name: 'Projekte'}),
+  new Route({path: '/account/...', component: ProjectBrowser, name: 'Account'})
 ])
 
 export class SampleManagerApp {

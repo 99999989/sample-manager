@@ -19,6 +19,25 @@
   padding-top: 0.6em;
 }
 
+
+
+.card-title.grey-text.text-darken-2 {
+  position: absolute;
+  bottom: 23px;
+  right: 30px;
+}
+
+.gcm-indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 2px;
+}
+
+.card.user-card {
+  height: 70px;
+}
+
 .help-image-task1 {
   position: absolute;
   top: 90px;

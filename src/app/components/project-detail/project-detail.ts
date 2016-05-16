@@ -16,13 +16,14 @@ import {Trigger} from '../../models/trigger';
 import {TriggerService} from '../../services/trigger-service';
 import {LoadingSpinner} from '../common/loading-spinner';
 import {ActionService} from '../../services/action-service';
+import {UserModal} from '../user-modal/user-modal';
 
 @Component({
   selector: 'project-detail',
   templateUrl: 'app/components/project-detail/project-detail.html',
   styleUrls: ['app/components/project-detail/project-detail.css'],
   providers: [ProjectService, MeasureService, TriggerService, ActionService],
-  directives: [ROUTER_DIRECTIVES, MaterializeDirective, MeasureModal, TriggerModal, LoadingSpinner],
+  directives: [ROUTER_DIRECTIVES, MaterializeDirective, MeasureModal, TriggerModal, LoadingSpinner, UserModal],
   pipes: [TranslatePipe]
 })
 
@@ -158,6 +159,15 @@ export class ProjectDetail {
 
   public navigateBack() {
     this._router.navigate(['ProjectList'])
+  }
+
+  private collectSelectedUsers():string[] {
+    let users:string[] = [];
+    for (let i = 0; i < this.project.users.length; i++) {
+      if (this.project.users[i].checked)
+      users.push(this.project.users[i]._id);
+    }
+    return users;
   }
 
   public repeatEntries:[number] = [

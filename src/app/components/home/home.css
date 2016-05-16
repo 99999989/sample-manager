@@ -52,3 +52,17 @@
     margin-left: 170px;
   }
 }
+
+/* Google Play Logo */
+@media screen and (max-width: 993px) {
+  .google-play-logo > img {
+    max-height: 110px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .google-play-logo > img {
+    max-height: 80px;
+  }
+}
+
