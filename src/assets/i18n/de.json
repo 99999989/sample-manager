@@ -8,7 +8,7 @@
   "triggerType_and": "UND",
   "triggerType_or": "ODER",
   "triggerType_place": "Ort",
-  "triggerType_random": "Intervall",
+  "triggerType_random": "Zufall",
   "triggerType_social": "Social Media",
   "triggerType_health": "Gesundheit",
   "triggerType_external": "Extern"

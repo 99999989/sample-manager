@@ -17,18 +17,21 @@ import {TriggerService} from '../../services/trigger-service';
 import {LoadingSpinner} from '../common/loading-spinner';
 import {ActionService} from '../../services/action-service';
 import {UserModal} from '../user-modal/user-modal';
+import {RecordService} from '../../services/record-service';
+import {RecordProject} from '../../models/record-project';
 
 @Component({
   selector: 'project-detail',
   templateUrl: 'app/components/project-detail/project-detail.html',
   styleUrls: ['app/components/project-detail/project-detail.css'],
-  providers: [ProjectService, MeasureService, TriggerService, ActionService],
+  providers: [ProjectService, MeasureService, TriggerService, ActionService, RecordService],
   directives: [ROUTER_DIRECTIVES, MaterializeDirective, MeasureModal, TriggerModal, LoadingSpinner, UserModal],
   pipes: [TranslatePipe]
 })
 
 export class ProjectDetail {
   public project:Project;
+  public statistics:[RecordProject];
   public showLoadingSpinner:boolean = true;
   public newMeasure:Measure;
   public tempMeasure:Measure;
@@ -40,7 +43,8 @@ export class ProjectDetail {
               private _triggerService:TriggerService,
               private _router:Router,
               private _sharedService:SharedService,
-              private _actionService:ActionService) {
+              private _actionService:ActionService,
+              private _recordService:RecordService) {
   }
 
   ngOnInit() {
@@ -65,8 +69,22 @@ export class ProjectDetail {
         this._sharedService.notify<Project>('currentProject', this.project);
       }
     );
+
+    this._recordService.getRecordsByProject(this._routeParams.get('projectId')).subscribe(
+      statistics => {
+        this.statistics = statistics;
+      },
+      error =>  Materialize.toast(error, 4000),
+      () => {
+        //this.showLoadingSpinner = false;
+      }
+    );
   }
 
+  public getDate(date:string):Date {
+    return new Date(date);
+  }
+  
   public getDecodedTimeSpan(trigger){
     return this._triggerService.decodeTimeSpan(trigger);
   }

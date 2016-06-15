@@ -299,8 +299,40 @@
   </div>
 
   <!-- Statistiken -->
-  <div id="statistics" class="col s12">
-    <div class="help-image-statistics-wrapper">
+  <div id="statistics" class="col s12" >
+    <div *ngFor="#statistic of statistics" class="grey-text">
+      <h3 class="grey-text text-darken-1">{{statistic.alias}}</h3>
+      <table>
+        <thead>
+        <tr>
+
+          <th data-field="name" class="">Zeit</th>
+          <th data-field="price" class="">User</th>
+          <th data-field="price" class="">Antwort</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        <tr *ngFor="#record of statistic.records">
+
+          <td class="">
+            {{getDate(record.created) | date:'medium'}}
+          </td>
+          <td class="">
+            {{record.user.email}}
+          </td>
+          <td>
+            {{record.value}}
+          </td>
+
+        </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="statistics && statistics.length === 0" class="help-image-statistics-wrapper">
       <img src="../../../assets/images/nothing.png" class="help-image-statistics" />
     </div>
   </div>

@@ -4,7 +4,7 @@
     <!--<div class="brand"><img src="../assets/images/icon_inverted.png" height="45px" /></div>-->
     <div class="nav-wrapper">
       <divs class="col s12">
-        <a href="#home" class="breadcrumb"><i class="material-icons left pink-text text-darken-1">android</i> Svendroid</a>
+        <a href="#home" class="breadcrumb"><img src="../../../assets/images/logo_heading.png" style="position: absolute; top: 10px" height="35px"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
         <a *ngIf="isActive('Projekte')" href="#/projekte" class="breadcrumb">Projekte</a>
         <a *ngIf="isActive('Projekte') && currentProject" href="#/projekte/{{currentProject ? currentProject._id : '?'}}" class="breadcrumb extended">{{currentProject ? currentProject.name : '?'}}</a>
         <a *ngIf="isActive('Projekte') && currentProject && currentMeasure" class="breadcrumb extended">{{currentMeasure.alias | slice:0:15}}{{currentMeasure.alias.length > 15 ? '...' : ''}}</a>
@@ -13,7 +13,7 @@
     </div>
 
     <a materialize="sideNav" [materializeParams]="[{edge:'left', menuWidth: 65, closeOnClick: false}]"
-       href="#" data-activates="slide-out" class="button-collapse" style="position: absolute;top: 0px;"><i class="material-icons">reorder</i></a>
+       href="#" data-activates="slide-out" class="button-collapse" style="position: absolute;top: 0px;"><i class="material-icons">view_headline</i></a>
 
     <button materialize="leanModal"
             [materializeParams]="params"
