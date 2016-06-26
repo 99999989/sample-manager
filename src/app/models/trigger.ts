@@ -15,8 +15,8 @@ export class Trigger {
   constructor(project:Project) {
       this.project = project;
       let timeSpan:TimeSpan = new TimeSpan();
-      timeSpan.cronStart = '0 0 8 1/1 * ? *';
-      timeSpan.cronEnd = '0 0 18 1/1 * ? *';
+      timeSpan.cronStart = '0 0 10 1/1 * ? *';
+      timeSpan.cronEnd = '0 0 22 1/1 * ? *';
       timeSpan.repeats = 1;
       this.timeSpan = timeSpan;
   }

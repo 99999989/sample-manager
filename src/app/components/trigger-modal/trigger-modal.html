@@ -125,7 +125,7 @@
         </div>
         -->
         <div class="col s12 grey-text">
-          <i class="left material-icons blue-text">info</i> Geben Sie eine Intervall an, zu welchem der Trigger ausgelöst werden soll.
+          <i class="left material-icons blue-text">info</i> Geben Sie einen Intervall an, zu welchem der Trigger ausgelöst werden soll.
         </div>
         <br><br>
         <a href="http://www.cronmaker.com/" target="_blank">Cron Maker</a>
@@ -173,7 +173,7 @@
   </div>
   <div class="modal-footer grey lighten-3" style="position: fixed; bottom: 0px;">
 
-    <button *ngIf="modalStep !== 4 && modalStep !== 1 &&
+    <button *ngIf="modalStep !== 4 && modalStep !== 1 && !(tempTrigger.type === 'random' && modalStep === 3) &&
                    !(tempTrigger.type === 'external' && modalStep === 2)" class="modal-action waves-effect waves-light btn" (click)="step(1)">
       Weiter
     </button>
@@ -187,7 +187,7 @@
     <button *ngIf="modalStep === 1" class="modal-action waves-effect waves-pink btn-flat" (click)="cancel()">
       Abbrechen
     </button>
-    <button *ngIf="modalStep !== 1 &&
+    <button *ngIf="modalStep !== 1 ||
                   (modalstep === 3 && tempTrigger.type === 'random')" (click)="step(-1)" class="modal-action waves-effect waves-pink btn-flat">
       Zur&uuml;ck
     </button>
