@@ -76,6 +76,10 @@ export class MeasureModal {
       (this.tempMeasure.type === 'location' ||
       this.tempMeasure.type === 'volume')) {
       this.modalStep = 2;
+    } else if ( value === 1 && this.modalStep === 3 && this.tempMeasure.type === 'open') {
+      this.modalStep = 5;
+    } else if ( value === -1 && this.modalStep === 5 && this.tempMeasure.type === 'open') {
+      this.modalStep = 3;
     } else {
       this.modalStep += value;
     }
