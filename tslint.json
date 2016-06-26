@@ -58,7 +58,7 @@
     "typedef-whitespace": [
       true,
       {
-        "call-signature": "nppace",
+        "call-signature": "nospace",
         "index-signature": "nospace",
         "parameter": "nospace",
         "property-declaration": "nospace",

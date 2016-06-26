@@ -39,9 +39,19 @@ export class SharedService {
 
   public getIconByType(type:string):string {
     switch (type) {
-      case 'yes_no':
+      case 'select_one':
+            return 'done';
+      case 'select_many':
+            return 'done_all';
+      case 'likert_scale':
+            return 'stars';
+      case 'visual_analog_scale':
+            return 'linear_scale';
       case 'rating':
+            return 'stars';
       case 'frequency':
+            return 'replay';
+      case 'yes_no':
       case 'open':
             return 'help_outline';
       case 'location':

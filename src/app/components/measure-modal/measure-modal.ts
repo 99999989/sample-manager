@@ -116,12 +116,16 @@ export class MeasureModal {
   }
 
   public measureTypes:[string] = [
-    'yes_no',
+    'select_one',
+    'select_many',
+    //'likert_scale',
+    //'visual_analog_scale',
+    //'yes_no',
     'frequency',
     'rating',
     'open',
-    'volume',
-    'location'
+    //'volume',
+    //'location'
   ];
 
   public repeatEntries = [

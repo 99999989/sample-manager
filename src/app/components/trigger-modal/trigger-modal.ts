@@ -106,10 +106,10 @@ export class TriggerModal {
 
   public triggerTypes:[string] = [
     'random',
-    'place',
-    'social',
-    'health',
-    'external'
+    //'place',
+    //'social',
+    //'health',
+    //'external'
 
   ];
 

@@ -68,7 +68,9 @@ export class SampleManagerApp {
   public currentMeasure:Measure = null;
   public currentTrigger:Trigger = null;
 
-  constructor(private _router:Router, private _userService:UserService, private _sharedService:SharedService,
+  constructor(private _router:Router,
+              private _userService:UserService,
+              private _sharedService:SharedService,
               private _translate:TranslateService) {
     this._log.info('constructor')(AppConfig);
     // this language will be used as a fallback when a translation isn't found in the current language

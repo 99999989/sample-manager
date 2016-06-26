@@ -11,7 +11,6 @@ import {Measure} from '../models/measure';
 @Injectable()
 export class ActionService {
   private url:string = 'api/actions/';
-  private http:HttpService;
 
   constructor(private http: HttpService) {
   }

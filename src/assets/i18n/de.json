@@ -1,4 +1,8 @@
 {
+  "measureType_select_one": "Einzelantwort",
+  "measureType_select_many": "Mehrfachantwort",
+  "measureType_visual_analog_scale": "Visual Analog Scale",
+  "measureType_likert_scale": "Likert Scale",
   "measureType_yes_no": "Ja / Nein",
   "measureType_rating": "Bewertung",
   "measureType_frequency": "Häufigkeit",

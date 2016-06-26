@@ -14,10 +14,8 @@ import {Project} from '../models/project';
 @Injectable()
 export class UserService {
   private url:string = 'api/users/';
-  private http:HttpService;
 
   constructor(private http: HttpService) {
-    this.http = http;
   }
 
   /**
