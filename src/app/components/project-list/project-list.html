@@ -31,13 +31,17 @@
       <div class="card-image waves-effect waves-block waves-light">
         <img class="activator" src="{{project.imageUrl}}" height="115px">
 
-        <span class="card-title">{{project.name}}</span>
+        <span class="card-title">
+          <span class="material-icons" *ngIf="project.type === 'public'">language</span>
+          <span class="material-icons" *ngIf="project.type === 'private'">person</span>
+            {{project.name}}
+          </span>
       </div>
 
       <div class="card-content">
-
         <p>{{project.measures.length}} Messungen</p>
         <p>{{project.triggers.length}} Trigger</p>
+
       </div>
       <a class="btn-floating project-detail btn-large waves-effect waves-light "
          (click)="navigateToProject(project._id)">
@@ -105,9 +109,20 @@
 
     <div class="row">
       <div class="input-field col s12 m12 l12">
-        <i class="material-icons prefix">class</i>
-        <input id="name" type="text" class="validate" [(ngModel)]="newProject.name" autofocus>
+        <input id="name" type="text" [(ngModel)]="newProject.name" autofocus>
         <label for="name">Projektname</label>
+      </div>
+      <div class="input-field col s12">
+        <select materialize="material_select" [(ngModel)]="newProject.type">
+          <option value="" disabled>Bitte wählen</option>
+          <option value="public">Public</option>
+          <option value="private">Private</option>
+        </select>
+        <label>Typ</label>
+      </div>
+      <div class="col s12 grey-text">
+        <i class="left material-icons blue-text">info</i> Einem Projekt vom Typ "Public" können alle User teilnehmen.
+        Einem "Private" Projekt hingegen kann nur mit Einladung teilgenommen werden.
       </div>
     </div>
   </div>

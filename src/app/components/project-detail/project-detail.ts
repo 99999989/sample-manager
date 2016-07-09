@@ -35,7 +35,10 @@ export class ProjectDetail {
   public showLoadingSpinner:boolean = true;
   public newMeasure:Measure;
   public tempMeasure:Measure;
+  public measureToDelete:Measure = new Measure();
+  public triggerToDelete:Trigger = new Trigger();
   public newValue:string;
+  public params = [{dismissible: false, complete: function(){$('.lean-overlay').hide();}}];
 
   constructor(private _routeParams:RouteParams,
               private _projectService:ProjectService,
@@ -84,7 +87,7 @@ export class ProjectDetail {
   public getDate(date:string):Date {
     return new Date(date);
   }
-  
+
   public getDecodedTimeSpan(trigger){
     return this._triggerService.decodeTimeSpan(trigger);
   }
@@ -167,6 +170,26 @@ export class ProjectDetail {
     );
   }
 
+  public deleteMeasure(measure:Measure) {
+    this._measureService.deleteMeasure(measure._id).subscribe(
+      measure => {
+        Materialize.toast('Messung ' + measure.alias + ' gelöscht', 4000);
+        this.refreshProject();
+      },
+      error =>  Materialize.toast(error, 4000)
+    );
+  }
+
+  public deleteTrigger(trigger:Trigger) {
+    this._triggerService.deleteTrigger(trigger._id).subscribe(
+      measure => {
+        Materialize.toast('Trigger ' + trigger.alias + ' gelöscht', 4000);
+        this.refreshProject();
+      },
+      error =>  Materialize.toast(error, 4000)
+    );
+  }
+
   public navigateToMeasure(id:string) {
     this._router.navigate(['MeasureDetail', {projectId: this._routeParams.get('projectId'), measureId: id}]);
   }
@@ -178,6 +201,7 @@ export class ProjectDetail {
   public navigateBack() {
     this._router.navigate(['ProjectList'])
   }
+
 
   private collectSelectedUsers():string[] {
     let users:string[] = [];

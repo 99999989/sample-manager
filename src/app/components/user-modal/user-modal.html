@@ -1,4 +1,4 @@
-<button materialize="leanModal" [materializeParams]="[{dismissible: true}]" (click)="initUser()"
+<button *ngIf="project.type === 'private'" materialize="leanModal" [materializeParams]="[{dismissible: true}]" (click)="initUser()"
         class="waves-effect waves-light btn modal-trigger right" data-target="createUser">
   <i class="material-icons left">add</i> User
 </button>

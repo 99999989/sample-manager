@@ -11,7 +11,9 @@
     <h3 class="grey-text text-darken-1"><img src="{{project.imageUrl}}" height="32px" width="32px" class="circle" /> {{project.name}}</h3>
     <div class="row">
       <div class="col s6 grey-text text-darken-1">
-        Start: {{project.createdDate | date:'longDate'}}
+         <span *ngIf="project.type === 'public'" class="material-icons left">language</span>
+        <span *ngIf="project.type === 'private'" class="material-icons left">person</span>
+        <div>&nbsp;Start: {{project.createdDate | date:'longDate'}}</div>
       </div>
       <div class="col s4" *ngIf="!showLoadingSpinner && project && (project.measures.length === 0 || project.triggers.length === 0)">
 
@@ -37,6 +39,7 @@
       <li class="tab col s3"><a href="#statistics">Statistiken</a></li>
     </ul>
   </div>
+  <!-- Measure -->
   <div id="measures" class="col s12">
     <br>
     <div>
@@ -76,92 +79,6 @@
 
             </div>
 
-
-            <div class="card-reveal">
-          <span class="card-title grey-text text-darken-4" (click)="saveData(measure)">{{measure.menu}}<i
-            class="material-icons right">close</i></span>
-              <!-- Bearbeiten -->
-              <div *ngIf="measure.menu === 'Bearbeiten'">
-                <br>
-                <button materialize="dropdown"
-                        [materializeParams]="[{constrainwidth: false}]"
-                        class="dropdown-button btn"
-                        [attr.data-activates]="measure.id"><i
-                  class="left material-icons">{{getIconByType(measure.type)}}</i>{{measure.type}}
-                </button>
-                <ul id="{{measure.id}}" class="dropdown-content">
-                  <li><a (click)="measure.type = 'Ja / Nein'"><i class="left material-icons">help_outline</i>Ja /
-                    Nein</a>
-                  </li>
-                  <li><a (click)="measure.type = 'Häufigkeit'"><i class="left material-icons">help_outline</i>Häufigkeit</a>
-                  </li>
-                  <li><a (click)="measure.type = 'Bewertung'"><i
-                    class="left material-icons">help_outline</i>Bewertung</a>
-                  </li>
-                  <li class="divider"></li>
-                  <li><a (click)="measure.type = 'Lautstärke'"><i class="left material-icons">hearing</i>Lautstärke</a>
-                  </li>
-                  <li><a (click)="measure.type = 'Lokalisierung'"><i class="left material-icons">place</i>Lokalisierung</a>
-                  </li>
-                </ul>
-                <p></p>
-                <div class="input-field col s12">
-                  <i class="material-icons prefix">help</i>
-                  <input [(ngModel)]="measure.text" id="icon_prefix" type="text" class="validate">
-                  <label class="active" for="icon_prefix">Frage</label>
-                </div>
-                <div class="center-align">
-                  <div *ngFor="#value of measure.answerValues" class="chip">
-                    {{value}}
-                    <i class="material-icons">close</i>
-                  </div>
-                  &nbsp;
-                </div>
-
-              </div>
-              <!-- Regeln -->
-              <div *ngIf="measure.menu === 'Regeln'">
-                <table>
-                  <thead>
-                  <tr>
-                    <th data-field="id" class="center-align"><i class="material-icons">first_page</i></th>
-                    <th data-field="name" class="center-align"><i class="material-icons">last_page</i></th>
-                    <th data-field="price" class="center-align"><i class="material-icons">replay</i></th>
-                  </tr>
-                  </thead>
-
-                  <tbody>
-                  <tr *ngFor="#trigger of measure.triggers">
-                    <td class="center-align">
-                      {{trigger.begin}} Uhr
-                      <div class="range-field">
-                        <input type="range" min="0" max="{{trigger.end}}" [(ngModel)]="trigger.begin"/>
-                      </div>
-                    </td>
-                    <td class=center-align>
-                      {{trigger.end}} Uhr
-                      <div class="range-field">
-                        <input type="range" min="{{trigger.begin}}" max="24" [(ngModel)]="trigger.end"/>
-                      </div>
-                    </td>
-                    <td class="center-align">
-                      {{trigger.repeats}} mal
-                      <div class="range-field">
-                        <input type="range" min="0" max="10" [(ngModel)]="trigger.repeats"/>
-                      </div>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
-              </div>
-              <!-- Statistiken -->
-              <div *ngIf="measure.menu === 'Statistiken'" class="valign-wrapper">
-                <img src="../../../assets/images/chart.png" class="valign center-align"/>
-              </div>
-
-
-            </div>
-
             <div class="card-action">
               <a class="btn-floating measure-detail btn-large waves-effect waves-light "
                  (click)="navigateToMeasure(measure._id)">
@@ -171,7 +88,11 @@
               <button class="btn-flat" (click)="triggerManual(measure._id)">
                 Auslösen
               </button>
-              <button class="btn-flat activator" >
+              <button materialize="leanModal"
+                      [materializeParams]="params"
+                      class="btn-flat"
+                      data-target="deleteMeasure"
+                      (click)="measureToDelete = measure">
                 Löschen
               </button>
             </div>
@@ -184,9 +105,9 @@
         </div>
       </div>
     </div>
-
-
   </div>
+
+  <!-- Trigger -->
   <div id="triggers" class="col s12">
     <div class="row">
       <div class="col s12">
@@ -228,10 +149,11 @@
               <i class="material-icons">mode_edit</i>
             </a>
 
-            <button class="btn-flat activator" (click)="measure.menu = 'Statistiken'">
-              Auslösen
-            </button>
-            <button class="btn-flat activator" (click)="measure.menu = 'Statistiken'">
+            <button materialize="leanModal"
+                    [materializeParams]="params"
+                    class="btn-flat"
+                    data-target="deleteTrigger"
+                    (click)="triggerToDelete = trigger">
               Löschen
             </button>
           </div>
@@ -338,3 +260,24 @@
   </div>
 </div>
 
+<!-- Delete measure confirm modal -->
+<div id="deleteMeasure" class="modal bottom-sheet">
+  <div class="modal-content">
+    <h4 class="black-text">Messung <strong class="pink-text">{{measureToDelete.alias}}</strong> wirklich löschen?</h4>
+  </div>
+  <div class="modal-footer">
+    <button class="modal-action modal-close waves-effect waves-light btn" (click)="deleteMeasure(measureToDelete)">Löschen</button>&nbsp;
+    <button class="modal-action modal-close waves-effect waves-yellow btn-flat">Abbrechen</button>
+  </div>
+</div>
+
+<!-- Delete measure confirm modal -->
+<div id="deleteTrigger" class="modal bottom-sheet">
+  <div class="modal-content">
+    <h4 class="black-text">Trigger <strong class="pink-text">{{triggerToDelete.alias}}</strong> wirklich löschen?</h4>
+  </div>
+  <div class="modal-footer">
+    <button class="modal-action modal-close waves-effect waves-light btn" (click)="deleteTrigger(triggerToDelete)">Löschen</button>&nbsp;
+    <button class="modal-action modal-close waves-effect waves-yellow btn-flat">Abbrechen</button>
+  </div>
+</div>
