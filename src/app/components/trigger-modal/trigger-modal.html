@@ -74,7 +74,7 @@
     </div>
 
     <!-- Step 3: Cron Expression -->
-    <div *ngIf="modalStep === 3">
+    <div *ngIf="modalStep === 3 && tempTrigger.type !== 'timer'">
       <h4 class="black-text">
         <i class="left medium material-icons" style="font-size: 35px">{{getIconByType(tempTrigger.type)}}</i>
         <span>Wiederholungen</span>
@@ -128,10 +128,80 @@
           <i class="left material-icons blue-text">info</i> Geben Sie einen Intervall an, zu welchem der Trigger ausgelöst werden soll.
         </div>
         <br><br>
+        <!--
         <a href="http://www.cronmaker.com/" target="_blank">Cron Maker</a>
+        -->
       </div>
 
     </div>
+    <!-- Step 3 (Timer):  -->
+    <div *ngIf="modalStep === 3 && tempTrigger.type === 'timer'">
+      <h4 class="black-text">
+        <i class="left medium material-icons" style="font-size: 35px">{{getIconByType(tempTrigger.type)}}</i>
+        <span>Timer Einstellungen</span>
+      </h4>
+      <div class="row">
+        <br>
+        <table>
+
+          <thead>
+          <tr>
+            <th data-field="begin" class="center-align">Stunden</th>
+            <th data-field="end" class="center-align">Minuten</th>
+            <th data-field="repeats" class="center-align"><i class="material-icons">alarm</i></th>
+            <th data-field="repeats" class="center-align"></th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr *ngFor="#timer of tempTrigger.timers">
+            <td class="center-align">
+              {{timer.hour}}
+              <div class="range-field">
+                <input type="range" min="0" max="23" [(ngModel)]="timer.hour"
+                       (change)="timer.hour = $event.target.value"/>
+              </div>
+
+            </td>
+            <td class=center-align>
+              {{timer.minute}}
+              <div class="range-field">
+                <input type="range" min="0" max="59" [(ngModel)]="timer.minute"
+                       (change)="timer.minute = $event.target.value"/>
+              </div>
+            </td>
+
+            <td class="center-align">
+              {{timer.hour}}:{{getMinutes(timer.minute)}} Uhr
+            </td>
+            <td class="center-align">
+              <i class="material-icons" (click)="deleteTimer(timer)" style="cursor: pointer">clear</i>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <button class="btn" (click)="addTimer()"><i class="material-icons left">add</i>Neuer Timer</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <br>
+
+        <!--
+                <div class="input-field col s12 m12 l12" *ngFor="#cron of tempTrigger.cronExpression">
+                  <input id="cronExpression" type="text" class="validate">
+                  <label for="cronExpression" class="active">Cron Expression {{1}}</label>
+                </div>
+                -->
+        <div class="col s12 grey-text">
+          <i class="left material-icons blue-text">info</i> Geben Sie die Zeiten an, zu welchen der Trigger ausgelöst werden soll.
+        </div>
+        <br><br>
+
+      </div>
+
+    </div>
+
     <!-- Step 4a: Area trigger -->
     <div *ngIf="modalStep === 4 && tempTrigger.type === 'place'">
       <h4 class="black-text">
@@ -173,12 +243,12 @@
   </div>
   <div class="modal-footer grey lighten-3" style="position: fixed; bottom: 0px;">
 
-    <button *ngIf="modalStep !== 4 && modalStep !== 1 && !(tempTrigger.type === 'random' && modalStep === 3) &&
+    <button *ngIf="modalStep !== 4 && modalStep !== 1 && !(tempTrigger.type === 'random' && modalStep === 3) && !(tempTrigger.type === 'timer' && modalStep === 3)
                    !(tempTrigger.type === 'external' && modalStep === 2)" class="modal-action waves-effect waves-light btn" (click)="step(1)">
       Weiter
     </button>
     &nbsp;
-    <button *ngIf="modalStep === 4 || (modalStep == 3 && tempTrigger.type === 'random') ||
+    <button *ngIf="modalStep === 4 || modalStep == 3 && tempTrigger.type === 'random' || modalStep == 3 && tempTrigger.type === 'timer' ||
                   (modalStep === 2 && tempTrigger.type === 'external')" class="modal-action waves-effect waves-light btn"
             (click)="saveTrigger(tempTrigger)">
       {{ tempTrigger._id ? 'Speichern' : 'Erstellen' }}

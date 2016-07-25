@@ -13,6 +13,7 @@
   "triggerType_or": "ODER",
   "triggerType_place": "Ort",
   "triggerType_random": "Zufall",
+  "triggerType_timer": "Timer",
   "triggerType_social": "Social Media",
   "triggerType_health": "Gesundheit",
   "triggerType_external": "Extern"

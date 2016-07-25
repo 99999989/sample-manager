@@ -27,7 +27,8 @@
         <label for="alias">Alias</label>
       </div>
 
-      <table *ngIf="timeSpan">
+      <!-- Time span: for not timer tpyes -->
+      <table *ngIf="timeSpan && tempTrigger.type !== 'timer'">
         <thead>
         <tr>
           <th data-field="id" class="center-align"><i class="material-icons">first_page</i></th>
@@ -59,6 +60,52 @@
         </tr>
         </tbody>
       </table>
+
+      <!-- Timer type -->
+      <table>
+        <thead>
+        <tr>
+          <th data-field="begin" class="center-align">Stunden</th>
+          <th data-field="end" class="center-align">Minuten</th>
+          <th data-field="repeats" class="center-align"><i class="material-icons">alarm</i></th>
+          <th data-field="repeats" class="center-align"></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr *ngFor="#timer of tempTrigger.timers">
+          <td class="center-align">
+            {{timer.hour}}
+            <div class="range-field">
+              <input type="range" min="0" max="23" [(ngModel)]="timer.hour"
+                     (change)="timer.hour = $event.target.value"/>
+            </div>
+
+          </td>
+          <td class=center-align>
+            {{timer.minute}}
+            <div class="range-field">
+              <input type="range" min="0" max="59" [(ngModel)]="timer.minute"
+                     (change)="timer.minute = $event.target.value"/>
+            </div>
+          </td>
+
+          <td class="center-align">
+            {{timer.hour}}:{{getMinutes(timer.minute)}} Uhr
+          </td>
+          <td class="center-align">
+            <i class="material-icons" (click)="deleteTimer(timer)" style="cursor: pointer">clear</i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <button class="btn" (click)="addTimer()"><i class="material-icons left">add</i>Neuer Timer</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <p>&nbsp;</p>
       <p>&nbsp;</p>
     </div>
   </div>

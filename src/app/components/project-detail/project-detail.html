@@ -139,6 +139,15 @@
                 </p>
                 &nbsp;
               </div>
+
+            </div>
+
+            <div *ngIf="trigger.timers">
+              <i class="material-icons left">alarm</i>
+              <span class="grey-text" *ngFor="#timer of trigger.timers; #i = index;">
+                {{timer.hour}}:{{timer.minute}} Uhr<span *ngIf="i !== (trigger.timers.length - 1)">,</span>
+              </span>
+              &nbsp;
             </div>
 
           </div>

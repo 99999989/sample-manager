@@ -8,6 +8,7 @@ import {SharedService} from '../../services/shared-service';
 import {Project} from '../../models/project';
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 import {TimeSpanLocal} from '../../models/time-span-local';
+import {Timer} from '../../models/timer';
 import {LoadingSpinner} from '../common/loading-spinner';
 
 @Component({
@@ -83,6 +84,25 @@ export class TriggerDetail {
     return this.sharedService.getIconByType(type);
   }
 
+
+  public addTimer() {
+    let timer:Timer = new Timer();
+    timer.hour = 10;
+    timer.minute = 30;
+    this.tempTrigger.timers.push(timer);
+  }
+
+  public deleteTimer(timer:Timer) {
+    this.tempTrigger.timers.splice(this.tempTrigger.timers.indexOf(timer), 1);
+  }
+
+  public getMinutes(minutes:number) {
+    if (minutes < 10) {
+      return '0' + minutes;
+    }
+    return minutes;
+  }
+  
   public saveTrigger(trigger:Trigger) {
     this.encodeTimeSpan(trigger, this.timeSpan);
     this._triggerService.updateTrigger(trigger).subscribe(

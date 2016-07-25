@@ -64,6 +64,8 @@ export class SharedService {
             return 'call_split';
       case 'random':
             return 'all_inclusive';
+      case 'timer':
+        return 'alarm';
       case 'place':
             return 'place';
       case 'social':

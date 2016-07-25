@@ -10,6 +10,7 @@ import {Output} from 'angular2/core';
 import {EventEmitter} from 'angular2/core';
 import {TimeSpan} from '../../models/time-span';
 import {TimeSpanLocal} from '../../models/time-span-local';
+import {Timer} from '../../models/timer';
 
 @Component({
   selector: 'trigger-modal',
@@ -104,8 +105,27 @@ export class TriggerModal {
     );
   }
 
+  public getMinutes(minutes:number) {
+    if (minutes < 10) {
+      return '0' + minutes;
+    }
+    return minutes;
+  }
+
+  public addTimer() {
+    let timer:Timer = new Timer();
+    timer.hour = 10;
+    timer.minute = 30;
+    this.tempTrigger.timers.push(timer);
+  }
+
+  public deleteTimer(timer:Timer) {
+    this.tempTrigger.timers.splice(this.tempTrigger.timers.indexOf(timer), 1);
+  }
+
   public triggerTypes:[string] = [
     'random',
+    'timer'
     //'place',
     //'social',
     //'health',
